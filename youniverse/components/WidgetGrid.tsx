@@ -2,12 +2,11 @@ import { useEffect, createRef, useRef, useState } from 'react'
 import 'gridstack/dist/gridstack.min.css'
 import { GridStack } from 'gridstack'
 import React from 'react'
-import addEvents from '@/utils/supabase/gridstack'
+// import addEvents from '@/utils/supabase/gridstack'
 
 export default function WidgetGrid({ someArray }: any) {
     const gridRef = useRef(null);
-    const refs = useRef({})
-    const [savedGrid, setSavedGrid] = useState<any>()
+    const refs = useRef([])
     const [widgetArray, setWidgetArray] = useState<any>(someArray)
 
     useEffect(() => {
@@ -21,72 +20,76 @@ export default function WidgetGrid({ someArray }: any) {
     }, []);
 
     if (Object.keys(refs.current).length !== widgetArray.length) {
+        console.log('Running the if');
+    
+        // Clear existing refs
+        refs.current = [];
+        //console.log('Cleared Refs', refs.current)
+        //console.log('Incomming Widget Array', widgetArray)
+        // Recreate refs for all widgets in the updated widgetArray
         widgetArray.forEach(({ id }: any) => {
-            refs.current[id] = refs.current[id] || createRef()
-        })
+            refs.current[id] = createRef();
+        });
     }
-
-    useEffect(() => {
-        console.log("Running")
-        const grid = gridRef.current;
-        widgetArray.forEach((item: any) => {
-            grid.removeWidget(refs.current[item.id].current)
-            grid.addWidget(refs.current[item.id].current, item)
-        })
-
-        //addEvents(grid)
-    }, [widgetArray])
 
     function saveFullGrid() {
         const grid = gridRef.current;
         let serializedFull = grid.save(false, true);
-        setSavedGrid(serializedFull)
-        console.log(savedGrid)
+        console.log(serializedFull.children)
+
+        setWidgetArray(serializedFull.children)
+
     }
 
-    function generateUUID() {
-        return Math.random()
+    function addEvents(grid: any) {
+        grid.on('resizestop', function () {
+            saveFullGrid()
+        }).on('dragstop', function () {
+            saveFullGrid()
+        });
     }
+
+    useEffect(() => {
+        const grid = gridRef.current;
+        widgetArray.forEach((item: any) => {
+            if (refs.current[item.id].current) {
+                //console.log('running useeffect')
+                grid.removeWidget(refs.current[item.id].current)
+                grid.addWidget(refs.current[item.id].current, item)
+            }
+        })
+
+        addEvents(grid)
+    }, [widgetArray])
 
     function addWidget(type: string) {
-        const id = generateUUID();
+        //const id = widgetArray.length; // Use the length of the existing array as the new id
         const newItem = {
-            id: id,
-            "w": 3,
-            "h": 3,
-            component_data: {
-                type: type,
-            }
+          id: Math.random(),
+          "w": 3,
+          "h": 3,
+          component_data: {
+            type: type,
+          },
         };
-        setWidgetArray([...widgetArray, newItem])
-    }
+        setWidgetArray([...widgetArray, newItem]);
+      }
 
     function removeWidget(id: any) {
-        const grid = gridRef.current;
-        const widgetRef = refs.current[id];
+        const grid = GridStack.init()
+        let newArr = widgetArray.filter(item => item.id !== id)
+        //console.log('removed from state', newArr)
 
-        // Remove the widget from the grid
-        grid.removeWidget(widgetRef.current);
-
-        // // Remove the reference from the refs object
-        // const updatedRefs = { ...refs.current };
-        // delete updatedRefs[id];
-        // refs.current = updatedRefs;
-
-        // // Create a new array with the widget removed
-        // const updatedWidgetArray = widgetArray.filter(item => item.id !== id);
-
-        // // Set the new array as the state
-        // setWidgetArray(updatedWidgetArray);
+        setWidgetArray([...newArr]);
+        grid.removeWidget(refs.current[id].current, false);
     }
-
 
 
     const ParagraphComponent = ({ text, id }: any) => {
 
         return (
-            <div className='w-full h-full flex flex-col'>
-                <button onClick={() => removeWidget(id)} className='border border-red-500 bg-red-100 max-w-[30px] self-center rounded-md'>🗑️</button>
+            <div className='w-full h-full flex flex-col relative group'>
+                <button onClick={() => removeWidget(id)} className='group-hover:opacity-100 opacity-0 border border-red-500 bg-red-100 max-w-[30px] self-center rounded-md absolute top-0 right-0'>🗑️</button>
                 <p className='font-bold text-xl'>
                     Props: {text ? text : 'placeholder'}
                 </p>
@@ -97,8 +100,8 @@ export default function WidgetGrid({ someArray }: any) {
     const ButtonComponent = ({ text, id }: any) => {
 
         return (
-            <div className='w-full h-full flex flex-col'>
-                <button onClick={() => removeWidget(id)} className='border border-red-500 bg-red-100 max-w-[30px] self-center rounded-md'>🗑️</button>
+            <div className='w-full h-full flex flex-col relative group'>
+                <button onClick={() => removeWidget(id)} className='group-hover:opacity-100 opacity-0 border border-red-500 bg-red-100 max-w-[30px] self-center rounded-md absolute top-0 right-0'>🗑️</button>
                 <button className='border border-bule-500 bg-blue-300 text-white p-3 rounded-lg'>
                     Props: {text ? text : 'placeholder'}
                 </button>
@@ -115,14 +118,13 @@ export default function WidgetGrid({ someArray }: any) {
 
         const ComponentType = componentMappings[component.component_data.type];
         const componentProps = component.component_data.props || {};
-        console.log(component.id)
         return <ComponentType {...componentProps} id={component.id} />;
     };
 
     return (
         <>
             <div className='flex flex-row gap-5 my-12'>
-                <button onClick={saveFullGrid} className='border-4 border-black p-3 rounded-xl'>Save the grid</button>
+                <button onClick={saveFullGrid} className='border-4 border-black p-3 rounded-xl'>Save Full Grid</button>
                 <button onClick={() => addWidget('Paragraph')} className='border-4 border-black p-3 rounded-xl'>Add Paragraph</button>
                 <button onClick={() => addWidget('Button')} className='border-4 border-black p-3 rounded-xl'>Add Button</button>
             </div>
