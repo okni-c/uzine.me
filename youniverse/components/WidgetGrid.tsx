@@ -1,5 +1,6 @@
 import { useEffect, createRef, useRef, useState } from 'react'
 import 'gridstack/dist/gridstack.min.css'
+import 'gridstack/dist/gridstack-extra.min.css'
 import { GridStack } from 'gridstack'
 import React from 'react'
 // import addEvents from '@/utils/supabase/gridstack'
@@ -11,7 +12,12 @@ export default function WidgetGrid({ someArray }: any) {
 
     useEffect(() => {
         // Initialize GridStack when the component mounts
-        gridRef.current = GridStack.init();
+        gridRef.current = GridStack.init({
+            column: 4, 
+            resizable: {
+                handles: 'n,s,e,w'
+            }
+        });
 
         // return () => {
         //     // Cleanup GridStack when the component unmounts
@@ -20,12 +26,11 @@ export default function WidgetGrid({ someArray }: any) {
     }, []);
 
     if (Object.keys(refs.current).length !== widgetArray.length) {
-        console.log('Running the if');
-    
+        //console.log('Running the if');
+
         // Clear existing refs
         refs.current = [];
-        //console.log('Cleared Refs', refs.current)
-        //console.log('Incomming Widget Array', widgetArray)
+
         // Recreate refs for all widgets in the updated widgetArray
         widgetArray.forEach(({ id }: any) => {
             refs.current[id] = createRef();
@@ -65,18 +70,18 @@ export default function WidgetGrid({ someArray }: any) {
     function addWidget(type: string) {
         //const id = widgetArray.length; // Use the length of the existing array as the new id
         const newItem = {
-          id: Math.random(),
-          "w": 3,
-          "h": 3,
-          component_data: {
-            type: type,
-          },
+            id: Math.random(),
+            "w": 1,
+            "h": 1,
+            component_data: {
+                type: type,
+            },
         };
         setWidgetArray([...widgetArray, newItem]);
-      }
+    }
 
     function removeWidget(id: any) {
-        const grid = GridStack.init()
+        const grid = gridRef.current;
         let newArr = widgetArray.filter(item => item.id !== id)
         //console.log('removed from state', newArr)
 
@@ -88,7 +93,7 @@ export default function WidgetGrid({ someArray }: any) {
     const ParagraphComponent = ({ text, id }: any) => {
 
         return (
-            <div className='w-full h-full flex flex-col relative group'>
+            <div className='w-full h-full flex flex-col relative group grid-stack-border'>
                 <button onClick={() => removeWidget(id)} className='group-hover:opacity-100 opacity-0 border border-red-500 bg-red-100 max-w-[30px] self-center rounded-md absolute top-0 right-0'>🗑️</button>
                 <p className='font-bold text-xl'>
                     Props: {text ? text : 'placeholder'}
@@ -100,7 +105,7 @@ export default function WidgetGrid({ someArray }: any) {
     const ButtonComponent = ({ text, id }: any) => {
 
         return (
-            <div className='w-full h-full flex flex-col relative group'>
+            <div className='w-full h-full flex flex-col relative group grid-stack-border'>
                 <button onClick={() => removeWidget(id)} className='group-hover:opacity-100 opacity-0 border border-red-500 bg-red-100 max-w-[30px] self-center rounded-md absolute top-0 right-0'>🗑️</button>
                 <button className='border border-bule-500 bg-blue-300 text-white p-3 rounded-lg'>
                     Props: {text ? text : 'placeholder'}
@@ -135,7 +140,6 @@ export default function WidgetGrid({ someArray }: any) {
                             ref={refs.current[item.id]}
                             key={item.id}
                             className={'grid-stack-item'}
-                            gs-w="12"
                         >
                             <div className="grid-stack-item-content">
                                 <ComponentLoader component={item} />

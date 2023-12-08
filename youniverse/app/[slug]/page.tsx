@@ -15,8 +15,8 @@ export default function Page() {
         {
             "x": 0,
             "y": 0,
-            "w": 3,
-            "h": 5,
+            "w": 1,
+            "h": 1,
             "id": "0",
             "component_data": {
                 'type': 'Paragraph',
@@ -24,10 +24,10 @@ export default function Page() {
             }
         },
         {
-            "x": 3,
+            "x": 2,
             "y": 0,
-            "w": 3,
-            "h": 2,
+            "w": 1,
+            "h": 1,
             "id": "1",
             "component_data": {
                 'type': 'Button',

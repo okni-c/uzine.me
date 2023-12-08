@@ -41,6 +41,6 @@
   }
 }
 
-.grid-stack-item {
-  @apply border-dashed border-4 border-green-500 hover:cursor-move rounded-2xl;
+.grid-stack-border {
+  @apply border-2 border-neutral-300 hover:cursor-move rounded-2xl p-2 bg-white;
 }
