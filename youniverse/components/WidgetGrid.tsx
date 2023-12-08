@@ -13,10 +13,7 @@ export default function WidgetGrid({ someArray }: any) {
     useEffect(() => {
         // Initialize GridStack when the component mounts
         gridRef.current = GridStack.init({
-            column: 4, 
-            resizable: {
-                handles: 'n,s,e,w'
-            }
+            column: 4
         });
 
         // return () => {
@@ -114,10 +111,20 @@ export default function WidgetGrid({ someArray }: any) {
         )
     }
 
+    const ImageComponent = ({ src, id }: any) => {
+        return (
+            <div className='w-full h-full flex flex-col relative group grid-stack-border'>
+                <button onClick={() => removeWidget(id)} className='group-hover:opacity-100 opacity-0 border border-red-500 bg-red-100 max-w-[30px] self-center rounded-md absolute top-0 right-0'>🗑️</button>
+                <img src={src ? src : 'https://images.unsplash.com/photo-1503614472-8c93d56e92ce?q=80&w=1000&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxleHBsb3JlLWZlZWR8MXx8fGVufDB8fHx8fA%3D%3D'} className='h-full w-full object-cover rounded-lg' />
+            </div>
+        )
+    }
+
     const ComponentLoader = ({ component }: any) => {
         const componentMappings: any = {
             Paragraph: ParagraphComponent,
-            Button: ButtonComponent
+            Button: ButtonComponent,
+            Image: ImageComponent,
             // Add other mappings as needed
         };
 
@@ -132,6 +139,7 @@ export default function WidgetGrid({ someArray }: any) {
                 <button onClick={saveFullGrid} className='border-4 border-black p-3 rounded-xl'>Save Full Grid</button>
                 <button onClick={() => addWidget('Paragraph')} className='border-4 border-black p-3 rounded-xl'>Add Paragraph</button>
                 <button onClick={() => addWidget('Button')} className='border-4 border-black p-3 rounded-xl'>Add Button</button>
+                <button onClick={() => addWidget('Image')} className='border-4 border-black p-3 rounded-xl'>Add Image</button>
             </div>
             <div className="grid-stack">
                 {widgetArray.map((item: any) => {

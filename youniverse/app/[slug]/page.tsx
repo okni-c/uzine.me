@@ -20,7 +20,7 @@ export default function Page() {
             "id": "0",
             "component_data": {
                 'type': 'Paragraph',
-                'props': {text: 'I am X 0'},
+                'props': { text: 'I am X 0' },
             }
         },
         {
@@ -31,7 +31,7 @@ export default function Page() {
             "id": "1",
             "component_data": {
                 'type': 'Button',
-                'props': {text: 'I am X 1'},
+                'props': { text: 'I am X 1' },
             }
         },
     ]
@@ -58,21 +58,21 @@ export default function Page() {
 
     return (
         <>
-            <div className='flex flex-row gap-24 w-full justify-center'>
+            <div className='flex flex-row w-full justify-between p-5'>
                 {stores &&
                     <div className='flex flex-col gap-3 my-5'>
                         <h2 className='text-3xl font-black tracking-tighter'>{stores.full_name}</h2>
                         <p>{stores.description}</p>
                     </div>
                 }
-                <div>
-                    {/* <DnDProvider data={stores.components} /> */}
+                <div className='flex-grow max-w-[600px]'>
+                    <div className='w-full'>
+                        <WidgetGrid someArray={items} />
+                    </div>
                 </div>
             </div>
-            {/* <button onClick={saveFullGrid}>Save grid</button> */}
-            <div className='w-full p-6'>
-                <WidgetGrid someArray={items} />
-            </div>
+
+
         </>
     )
 
