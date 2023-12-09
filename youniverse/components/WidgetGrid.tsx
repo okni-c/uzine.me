@@ -6,8 +6,8 @@ import React from 'react'
 // import addEvents from '@/utils/supabase/gridstack'
 
 export default function WidgetGrid({ someArray }: any) {
-    const gridRef = useRef(null);
-    const refs = useRef([])
+    const gridRef = useRef<any>(null);
+    const refs = useRef<any>([])
     const [widgetArray, setWidgetArray] = useState<any>(someArray)
 
     useEffect(() => {
@@ -79,7 +79,7 @@ export default function WidgetGrid({ someArray }: any) {
 
     function removeWidget(id: any) {
         const grid = gridRef.current;
-        let newArr = widgetArray.filter(item => item.id !== id)
+        let newArr = widgetArray.filter((item: any) => item.id !== id)
         //console.log('removed from state', newArr)
 
         setWidgetArray([...newArr]);
@@ -98,7 +98,7 @@ export default function WidgetGrid({ someArray }: any) {
         //     // Need to Update the exact object in the widgetArray
         //   };
 
-        const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const handleChange = (event: any) => {
             event.preventDefault();
             const newValue = event.target.value;
           
