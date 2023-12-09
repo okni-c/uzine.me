@@ -1,10 +1,8 @@
 'use client'
-import DnDProvider from '@/components/DnDProvider';
 import { createClient } from '@/utils/supabase/client';
 import { useParams } from "next/navigation"
 import { useEffect } from 'react';
 import { useState } from 'react';
-import addEvents from '@/utils/supabase/gridstack';
 import WidgetGrid from '@/components/WidgetGrid';
 
 export default function Page() {
@@ -79,13 +77,6 @@ export default function Page() {
         }
         getProfileData()
     }, [params.slug])
-
-    // function saveFullGrid() {
-    //     var grid = GridStack.init();
-    //     let serializedFull = grid.save(true, true);
-    //     console.log(serializedFull)
-    //     setSavedGrid(serializedFull)
-    // }
 
     return (
         <>
