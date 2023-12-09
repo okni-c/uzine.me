@@ -11,29 +11,60 @@ export default function Page() {
     const supabase = createClient()
     const params = useParams()
     const [stores, setStores] = useState<any>()
+    
     const items = [
         {
+            "id": 0.07586734971435094,
+            "component_data": {
+                "type": "Paragraph"
+            },
             "x": 0,
             "y": 0,
-            "w": 1,
-            "h": 1,
-            "id": "0",
-            "component_data": {
-                'type': 'Paragraph',
-                'props': { text: 'I am X 0' },
-            }
+            "w": 3
         },
         {
-            "x": 2,
-            "y": 0,
-            "w": 1,
-            "h": 1,
-            "id": "1",
+            "id": 0.5167937156313944,
             "component_data": {
-                'type': 'Button',
-                'props': { text: 'I am X 1' },
-            }
+                "type": "Image"
+            },
+            "x": 3,
+            "y": 0
         },
+        {
+            "id": 0.6024000610105686,
+            "component_data": {
+                "type": "Image"
+            },
+            "x": 0,
+            "y": 1,
+            "h": 2
+        },
+        {
+            "id": 0.7025744087659613,
+            "component_data": {
+                "type": "Image"
+            },
+            "x": 1,
+            "y": 1,
+            "w": 2,
+            "h": 2
+        },
+        {
+            "id": 0.9848143362916137,
+            "component_data": {
+                "type": "Image"
+            },
+            "x": 3,
+            "y": 1
+        },
+        {
+            "id": 0.6409952662360476,
+            "component_data": {
+                "type": "Button"
+            },
+            "x": 3,
+            "y": 2
+        }
     ]
 
     useEffect(() => {
@@ -58,11 +89,11 @@ export default function Page() {
 
     return (
         <>
-            <div className='flex flex-row w-full justify-between p-5'>
+            <div className='flex md:flex-row w-full justify-between p-5 flex-col max-w-7xl'>
                 {stores &&
                     <div className='flex flex-col gap-3 my-5'>
-                        <h2 className='text-3xl font-black tracking-tighter'>{stores.full_name}</h2>
-                        <p>{stores.description}</p>
+                        <h2 className='text-5xl font-black tracking-tighter'>{stores.full_name}</h2>
+                        <p className='text-2xl'>{stores.description}</p>
                     </div>
                 }
                 <div className='flex-grow max-w-[600px]'>

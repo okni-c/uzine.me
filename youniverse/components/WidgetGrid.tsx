@@ -88,13 +88,39 @@ export default function WidgetGrid({ someArray }: any) {
 
 
     const ParagraphComponent = ({ text, id }: any) => {
+        const [value, setValue] = useState(text || 'Default Props');
+
+        // const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        //     setValue(event.target.value);
+        //     let tempObj = widgetArray.filter(item => item.id == id)
+        //     tempObj[0].component_data.props.text = event.target.value
+        //     console.log(tempObj[0])
+        //     // Need to Update the exact object in the widgetArray
+        //   };
+
+        const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+            event.preventDefault();
+            const newValue = event.target.value;
+          
+            // Update the state
+            setValue(newValue);
+          
+            // Update the corresponding object in widgetArray
+            // const updatedWidgetArray = widgetArray.map((item: any) =>
+            //   item.id === id ? { ...item, component_data: { type: item.component_data.type, props: { text: newValue } } } : item
+            // );
+
+            // console.log(updatedWidgetArray)
+          
+            // Assuming you have a function to update widgetArray in the parent component
+            //setTimeout(() => setWidgetArray([...updatedWidgetArray]), 10000)
+          };
 
         return (
             <div className='w-full h-full flex flex-col relative group grid-stack-border'>
-                <button onClick={() => removeWidget(id)} className='group-hover:opacity-100 opacity-0 border border-red-500 bg-red-100 max-w-[30px] self-center rounded-md absolute top-0 right-0'>🗑️</button>
-                <p className='font-bold text-xl'>
-                    Props: {text ? text : 'placeholder'}
-                </p>
+                <button onClick={() => removeWidget(id)} className='group-hover:opacity-100 opacity-0 border border-red-500 bg-red-100 max-w-[30px] self-center rounded-md absolute top-1 right-1'>🗑️</button>
+                <textarea className='font-bold text-xl break-words overscroll-x-none w-full h-full resize-none p-1 focus-visible:outline-neutral-400 rounded-lg' value={value} onChange={handleChange} />
+                    
             </div>
         );
     };
@@ -103,7 +129,7 @@ export default function WidgetGrid({ someArray }: any) {
 
         return (
             <div className='w-full h-full flex flex-col relative group grid-stack-border'>
-                <button onClick={() => removeWidget(id)} className='group-hover:opacity-100 opacity-0 border border-red-500 bg-red-100 max-w-[30px] self-center rounded-md absolute top-0 right-0'>🗑️</button>
+                <button onClick={() => removeWidget(id)} className='group-hover:opacity-100 opacity-0 border border-red-500 bg-red-100 max-w-[30px] self-center rounded-md absolute top-1 right-1'>🗑️</button>
                 <button className='border border-bule-500 bg-blue-300 text-white p-3 rounded-lg'>
                     Props: {text ? text : 'placeholder'}
                 </button>
@@ -113,9 +139,10 @@ export default function WidgetGrid({ someArray }: any) {
 
     const ImageComponent = ({ src, id }: any) => {
         return (
-            <div className='w-full h-full flex flex-col relative group grid-stack-border'>
-                <button onClick={() => removeWidget(id)} className='group-hover:opacity-100 opacity-0 border border-red-500 bg-red-100 max-w-[30px] self-center rounded-md absolute top-0 right-0'>🗑️</button>
-                <img src={src ? src : 'https://images.unsplash.com/photo-1503614472-8c93d56e92ce?q=80&w=1000&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxleHBsb3JlLWZlZWR8MXx8fGVufDB8fHx8fA%3D%3D'} className='h-full w-full object-cover rounded-lg' />
+            <div className='w-full h-full flex flex-col relative group rounded-2xl'>
+                <button onClick={() => removeWidget(id)} className='group-hover:opacity-100 opacity-0 border border-red-500 bg-red-100 max-w-[30px] self-center rounded-md absolute top-1 right-1'>🗑️</button>
+                <img src={src ? src : '/mountains_placeholder.png'} className='h-full w-full object-cover rounded-2xl' />
+                <p className='bg-white py-1 px-2 rounded-md absolute bottom-4 left-4 text-sm font-semibold drop-shadow-md border border-neutral-300 group'>Caption text goes here</p>
             </div>
         )
     }
