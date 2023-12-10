@@ -13,7 +13,11 @@ export default function WidgetGrid({ someArray }: any) {
     useEffect(() => {
         // Initialize GridStack when the component mounts
         gridRef.current = GridStack.init({
-            column: 4
+            column: 4,
+            resizable: {
+                handles: 'n,s,e,w'
+            },
+            animate: true
         });
 
         // return () => {
@@ -65,11 +69,11 @@ export default function WidgetGrid({ someArray }: any) {
     }, [widgetArray])
 
     function addWidget(type: string) {
-        //const id = widgetArray.length; // Use the length of the existing array as the new id
         const newItem = {
             id: Math.random(),
             "w": 1,
             "h": 1,
+            'maxH': 4,
             component_data: {
                 type: type,
             },
@@ -80,8 +84,6 @@ export default function WidgetGrid({ someArray }: any) {
     function removeWidget(id: any) {
         const grid = gridRef.current;
         let newArr = widgetArray.filter((item: any) => item.id !== id)
-        //console.log('removed from state', newArr)
-
         setWidgetArray([...newArr]);
         grid.removeWidget(refs.current[id].current, false);
     }
@@ -90,37 +92,31 @@ export default function WidgetGrid({ someArray }: any) {
     const ParagraphComponent = ({ text, id }: any) => {
         const [value, setValue] = useState(text || 'Default Props');
 
-        // const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        //     setValue(event.target.value);
-        //     let tempObj = widgetArray.filter(item => item.id == id)
-        //     tempObj[0].component_data.props.text = event.target.value
-        //     console.log(tempObj[0])
-        //     // Need to Update the exact object in the widgetArray
-        //   };
-
         const handleChange = (event: any) => {
             event.preventDefault();
             const newValue = event.target.value;
-          
             // Update the state
             setValue(newValue);
-          
-            // Update the corresponding object in widgetArray
-            // const updatedWidgetArray = widgetArray.map((item: any) =>
-            //   item.id === id ? { ...item, component_data: { type: item.component_data.type, props: { text: newValue } } } : item
-            // );
-
-            // console.log(updatedWidgetArray)
-          
-            // Assuming you have a function to update widgetArray in the parent component
-            //setTimeout(() => setWidgetArray([...updatedWidgetArray]), 10000)
-          };
+        };
 
         return (
             <div className='w-full h-full flex flex-col relative group grid-stack-border'>
+
                 <button onClick={() => removeWidget(id)} className='group-hover:opacity-100 opacity-0 border border-red-500 bg-red-100 max-w-[30px] self-center rounded-md absolute top-1 right-1'>🗑️</button>
                 <textarea className='font-bold text-xl break-words overscroll-x-none w-full h-full resize-none p-1 focus-visible:outline-neutral-400 rounded-lg' value={value} onChange={handleChange} />
-                    
+
+            </div>
+        );
+    };
+
+    const TestComponent = ({ text, id }: any) => {
+
+        return (
+            <div className='w-full h-full flex flex-col relative group grid-stack-border'>
+
+                <button onClick={() => removeWidget(id)} className='group-hover:opacity-100 opacity-0 border border-red-500 bg-red-100 max-w-[30px] self-center rounded-md absolute top-1 right-1'>🗑️</button>
+                <p>Hello test</p>
+
             </div>
         );
     };
@@ -152,6 +148,7 @@ export default function WidgetGrid({ someArray }: any) {
             Paragraph: ParagraphComponent,
             Button: ButtonComponent,
             Image: ImageComponent,
+            Test: TestComponent,
             // Add other mappings as needed
         };
 
@@ -174,8 +171,12 @@ export default function WidgetGrid({ someArray }: any) {
                         <div
                             ref={refs.current[item.id]}
                             key={item.id}
-                            className={'grid-stack-item'}
+                            className={'grid-stack-item relative'}
                         >
+                            {/* <div className='drag-handle-x drag-handle-n'></div>
+                            <div className='drag-handle-y drag-handle-w'></div>
+                            <div className='drag-handle-x drag-handle-s'></div>
+                            <div className='drag-handle-y drag-handle-e'></div> */}
                             <div className="grid-stack-item-content">
                                 <ComponentLoader component={item} />
                             </div>

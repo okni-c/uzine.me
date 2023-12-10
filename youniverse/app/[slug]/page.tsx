@@ -10,58 +10,76 @@ export default function Page() {
     const params = useParams()
     const [stores, setStores] = useState<any>()
     
+    // const items = [
+    //     {
+    //         "id": 0.07586734971435094,
+    //         "component_data": {
+    //             "type": "Paragraph"
+    //         },
+    //         "x": 0,
+    //         "y": 0,
+    //         "w": 3,
+    //         'maxH': 4
+    //     },
+    //     {
+    //         "id": 0.5167937156313944,
+    //         "component_data": {
+    //             "type": "Image"
+    //         },
+    //         "x": 3,
+    //         "y": 0,
+    //         'maxH': 4
+    //     },
+    //     {
+    //         "id": 0.6024000610105686,
+    //         "component_data": {
+    //             "type": "Image"
+    //         },
+    //         "x": 0,
+    //         "y": 1,
+    //         "h": 2,
+    //         'maxH': 4
+    //     },
+    //     {
+    //         "id": 0.7025744087659613,
+    //         "component_data": {
+    //             "type": "Image"
+    //         },
+    //         "x": 1,
+    //         "y": 1,
+    //         "w": 2,
+    //         "h": 2,
+    //         'maxH': 4
+    //     },
+    //     {
+    //         "id": 0.9848143362916137,
+    //         "component_data": {
+    //             "type": "Image"
+    //         },
+    //         "x": 3,
+    //         "y": 1,
+    //         'maxH': 4
+    //     },
+    //     {
+    //         "id": 0.6409952662360476,
+    //         "component_data": {
+    //             "type": "Button"
+    //         },
+    //         "x": 3,
+    //         "y": 2,
+    //         'maxH': 4
+    //     }
+    // ]
+
     const items = [
         {
             "id": 0.07586734971435094,
             "component_data": {
-                "type": "Paragraph"
-            },
-            "x": 0,
-            "y": 0,
-            "w": 3
-        },
-        {
-            "id": 0.5167937156313944,
-            "component_data": {
-                "type": "Image"
-            },
-            "x": 3,
-            "y": 0
-        },
-        {
-            "id": 0.6024000610105686,
-            "component_data": {
-                "type": "Image"
-            },
-            "x": 0,
-            "y": 1,
-            "h": 2
-        },
-        {
-            "id": 0.7025744087659613,
-            "component_data": {
-                "type": "Image"
+                "type": "Test"
             },
             "x": 1,
-            "y": 1,
-            "w": 2,
-            "h": 2
-        },
-        {
-            "id": 0.9848143362916137,
-            "component_data": {
-                "type": "Image"
-            },
-            "x": 3,
-            "y": 1
-        },
-        {
-            "id": 0.6409952662360476,
-            "component_data": {
-                "type": "Button"
-            },
-            "x": 3,
-            "y": 2
+            "y": 0,
+            "maxH": 4
         }
     ]
 
