@@ -100,9 +100,7 @@ export default function WidgetGrid({ someArray }: any) {
         };
 
         return (
-            <div className='w-full h-full flex flex-col relative group grid-stack-border'>
-
-                <button onClick={() => removeWidget(id)} className='group-hover:opacity-100 opacity-0 border border-red-500 bg-red-100 max-w-[30px] self-center rounded-md absolute top-1 right-1'>🗑️</button>
+            <div className='w-full h-full flex flex-col relative grid-stack-border'>
                 <textarea className='font-bold text-xl break-words overscroll-x-none w-full h-full resize-none p-1 focus-visible:outline-neutral-400 rounded-lg' value={value} onChange={handleChange} />
 
             </div>
@@ -112,11 +110,8 @@ export default function WidgetGrid({ someArray }: any) {
     const TestComponent = ({ text, id }: any) => {
 
         return (
-            <div className='w-full h-full flex flex-col relative group grid-stack-border'>
-
-                <button onClick={() => removeWidget(id)} className='group-hover:opacity-100 opacity-0 border border-red-500 bg-red-100 max-w-[30px] self-center rounded-md absolute top-1 right-1'>🗑️</button>
+            <div className='w-full h-full flex flex-col relative grid-stack-border'>
                 <p>Hello test</p>
-
             </div>
         );
     };
@@ -124,8 +119,7 @@ export default function WidgetGrid({ someArray }: any) {
     const ButtonComponent = ({ text, id }: any) => {
 
         return (
-            <div className='w-full h-full flex flex-col relative group grid-stack-border'>
-                <button onClick={() => removeWidget(id)} className='group-hover:opacity-100 opacity-0 border border-red-500 bg-red-100 max-w-[30px] self-center rounded-md absolute top-1 right-1'>🗑️</button>
+            <div className='w-full h-full flex flex-col relative grid-stack-border'>
                 <button className='border border-bule-500 bg-blue-300 text-white p-3 rounded-lg'>
                     Props: {text ? text : 'placeholder'}
                 </button>
@@ -135,8 +129,7 @@ export default function WidgetGrid({ someArray }: any) {
 
     const ImageComponent = ({ src, id }: any) => {
         return (
-            <div className='w-full h-full flex flex-col relative group rounded-2xl'>
-                <button onClick={() => removeWidget(id)} className='group-hover:opacity-100 opacity-0 border border-red-500 bg-red-100 max-w-[30px] self-center rounded-md absolute top-1 right-1'>🗑️</button>
+            <div className='w-full h-full flex flex-col relative rounded-2xl'>
                 <img src={src ? src : '/mountains_placeholder.png'} className='h-full w-full object-cover rounded-2xl' />
                 <p className='bg-white py-1 px-2 rounded-md absolute bottom-4 left-4 text-sm font-semibold drop-shadow-md border border-neutral-300 group'>Caption text goes here</p>
             </div>
@@ -171,12 +164,11 @@ export default function WidgetGrid({ someArray }: any) {
                         <div
                             ref={refs.current[item.id]}
                             key={item.id}
-                            className={'grid-stack-item relative'}
+                            className={'grid-stack-item relative group'}
                         >
-                            {/* <div className='drag-handle-x drag-handle-n'></div>
-                            <div className='drag-handle-y drag-handle-w'></div>
-                            <div className='drag-handle-x drag-handle-s'></div>
-                            <div className='drag-handle-y drag-handle-e'></div> */}
+                            <button onClick={() => removeWidget(item.id)} className='group-hover:opacity-100 opacity-0 w-[30px] h-[30px] self-center rounded-full absolute top-0 right-1 z-[99999] flex items-center justify-center bg-[#454545] hover:bg-[#d9d9d9] delete-btn-hover transition-colors duration-100 ease-linear'>
+                                <svg className='h-[14px] w-[12px] fill-[#D9D9D9] transition-colors duration-100 ease-linear' height="14" viewBox="0 0 12 14" width="12" xmlns="http://www.w3.org/2000/svg"><path d="m11.5714.875004h-3.21426l-.25178-.511327c-.05334-.109317-.1355-.201272-.23724-.2655195-.10174-.064248-.21902-.0982403-.33866-.09815271h-3.0616c-.11937-.00046841-.23644.03339711-.33782.09771661-.10138.0643196-.18296.1564916-.2354.2659556l-.25178.511327h-3.214289c-.113664 0-.222673.046094-.303045.128146-.0803731.08204-.125526.19332-.125526.30935v.875c0 .11604.0451529.22732.125526.30936.080372.08205.189381.12814.303045.12814h11.142829c.1137 0 .2227-.04609.3031-.12814.0803-.08204.1255-.19332.1255-.30936v-.875c0-.11603-.0452-.22731-.1255-.30935-.0804-.082052-.1894-.128146-.3031-.128146zm-10.1464 11.894496c.02044.3332.16451.646.40287.8746.23837.2286.55311.3559.88017.3559h6.58392c.32706 0 .6418-.1273.88014-.3559.2384-.2286.3825-.5414.4029-.8746l.5679-9.2695h-10.285757z"/></svg>
+                            </button>
                             <div className="grid-stack-item-content">
                                 <ComponentLoader component={item} />
                             </div>
