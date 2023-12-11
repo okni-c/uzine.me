@@ -4,7 +4,7 @@ import 'gridstack/dist/gridstack-extra.min.css'
 import { GridStack } from 'gridstack'
 import React from 'react'
 import { Sketch } from '@uiw/react-color'
-// import addEvents from '@/utils/supabase/gridstack'
+import ComponentLoader from './widgets/utils/ComponentLoader'
 
 export default function WidgetGrid({ someArray }: any) {
     const gridRef = useRef<any>(null);
@@ -70,16 +70,30 @@ export default function WidgetGrid({ someArray }: any) {
     }, [widgetArray])
 
     function addWidget(type: string) {
-        const newItem = {
-            id: Math.random(),
-            "w": 1,
-            "h": 1,
-            'maxH': 4,
-            component_data: {
-                type: type,
-            },
-        };
-        setWidgetArray([...widgetArray, newItem]);
+        if (type == 'Paragraph') {
+            const newItem = {
+                id: Math.random(),
+                "w": 1,
+                "h": 1,
+                'maxH': 4,
+                component_data: {
+                    type: type,
+                    bg_color: '#454545'
+                },
+            };
+            setWidgetArray([...widgetArray, newItem]);
+        } else {
+            const newItem = {
+                id: Math.random(),
+                "w": 1,
+                "h": 1,
+                'maxH': 4,
+                component_data: {
+                    type: type,
+                },
+            };
+            setWidgetArray([...widgetArray, newItem]);
+        }
     }
 
     function removeWidget(id: any) {
@@ -89,70 +103,11 @@ export default function WidgetGrid({ someArray }: any) {
         grid.removeWidget(refs.current[id].current, false);
     }
 
-    const ParagraphComponent = ({ text, id }: any) => {
-        const [value, setValue] = useState(text || 'Default Props');
-
-        const handleChange = (event: any) => {
-            event.preventDefault();
-            const newValue = event.target.value;
-            // Update the state
-            setValue(newValue);
-        };
-
-        return (
-            <div className='w-full h-full flex flex-col relative grid-stack-border'>
-                <textarea className='font-bold text-xl break-words overscroll-x-none w-full h-full resize-none p-1 focus-visible:outline-neutral-400 rounded-lg' value={value} onChange={handleChange} />
-            </div>
-        );
-    };
-
-    const TestComponent = ({ text, id }: any) => {
-
-        return (
-            <div className='w-full h-full flex flex-col relative grid-stack-border'>
-                <p>Hello test</p>
-            </div>
-        );
-    };
-
-    const ButtonComponent = ({ text, id }: any) => {
-
-        return (
-            <div className='w-full h-full flex flex-col relative grid-stack-border'>
-                <button className='border border-bule-500 bg-blue-300 text-white p-3 rounded-lg'>
-                    Props: {text ? text : 'placeholder'}
-                </button>
-            </div>
-        )
-    }
-
-    const ImageComponent = ({ src, id }: any) => {
-        return (
-            <div className='w-full h-full flex flex-col relative rounded-2xl'>
-                <img src={src ? src : '/mountains_placeholder.png'} className='h-full w-full object-cover rounded-2xl' />
-                <p className='bg-white py-1 px-2 rounded-md absolute bottom-4 left-4 text-sm font-semibold drop-shadow-md border border-neutral-300 group'>Caption text goes here</p>
-            </div>
-        )
-    }
-
-    const ComponentLoader = ({ component }: any) => {
-        const componentMappings: any = {
-            Paragraph: ParagraphComponent,
-            Button: ButtonComponent,
-            Image: ImageComponent,
-            Test: TestComponent,
-            // Add other mappings as needed
-        };
-
-        const ComponentType = componentMappings[component.component_data.type];
-        const componentProps = component.component_data.props || {};
-        return <ComponentType {...componentProps} id={component.id} />;
-    };
-
     const Widget = ({ item }: any) => {
         const [deleteDialog, setDeleteDialog] = useState<boolean>(false);
         const [optionsDialog, setOptionsDialog] = useState<boolean>(false);
         const [showColor, setShowColor] = useState<boolean>(false);
+        const [hex, setHex] = useState<any>(item.component_data.bg_color)
 
         return (
             <>
@@ -171,7 +126,7 @@ export default function WidgetGrid({ someArray }: any) {
                             </div>
                         </div>
                     ) : null}
-                    <ComponentLoader component={item} />
+                    <ComponentLoader component={item} hex={hex} />
                 </div>
                 {/* Paragraph Widget Formatting */}
                 {item.component_data.type === 'Paragraph' ? (
@@ -197,7 +152,13 @@ export default function WidgetGrid({ someArray }: any) {
                                         <path d="M1.78418 11.7158C1.3623 12.1376 1.125 12.71 1.125 13.3069V14.9062L0 16.8749L1.125 17.9999L3.09375 16.8749H4.69301C5.28961 16.8749 5.86195 16.638 6.28383 16.2161L10.736 11.7646L6.23602 7.26462L1.78418 11.7158ZM17.0114 0.988525C15.6941 -0.329834 13.5562 -0.329834 12.2389 0.988525L9.52875 3.69872L9.0682 3.23817C8.73633 2.9063 8.2016 2.91087 7.875 3.23817L6.43465 4.67853C6.10523 5.00794 6.10523 5.54232 6.43465 5.87173L12.1279 11.5649C12.4597 11.8968 12.9945 11.8922 13.3211 11.5649L14.7614 10.1249C15.0908 9.79552 15.0908 9.26114 14.7614 8.93173L14.3009 8.47118L17.0111 5.76099C18.3298 4.44333 18.3298 2.30653 17.0114 0.988525Z" fill="#D9D9D9" />
                                     </svg></button>
                                 </div>
-                                {showColor ? <Sketch className='absolute bottom-[-350px]' /> : null}
+                                {showColor ? <Sketch className='absolute z-[9999999] bottom-[-330px]'
+                                    color={hex}
+                                    onChange={(color) => {
+                                        setHex(color.hex);
+                                    }}
+                                    disableAlpha={true}
+                                    /> : null}
                             </>
                         ) : null}
                     </>
@@ -211,7 +172,6 @@ export default function WidgetGrid({ someArray }: any) {
             <div className='flex flex-row gap-5 my-12'>
                 <button onClick={saveFullGrid} className='border-4 border-black p-3 rounded-xl'>Save Full Grid</button>
                 <button onClick={() => addWidget('Paragraph')} className='border-4 border-black p-3 rounded-xl'>Add Paragraph</button>
-                <button onClick={() => addWidget('Button')} className='border-4 border-black p-3 rounded-xl'>Add Button</button>
                 <button onClick={() => addWidget('Image')} className='border-4 border-black p-3 rounded-xl'>Add Image</button>
             </div>
             <div className="grid-stack">

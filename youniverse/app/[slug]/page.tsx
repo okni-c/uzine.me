@@ -75,7 +75,8 @@ export default function Page() {
         {
             "id": 0.07586734971435094,
             "component_data": {
-                "type": "Test"
+                "type": "Paragraph",
+                "bg_color": "#D9D9D9",
             },
             "x": 1,
             "y": 0,
