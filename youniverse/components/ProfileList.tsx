@@ -2,8 +2,7 @@ import { createClient } from '@/utils/supabase/server';
 import { cookies } from 'next/headers';
 import NoteBody from './ProfileLink';
 
-const cookieStore = cookies()
-const supabase = createClient(cookieStore);
+
 
 type TProfile = {
     slug: string,
@@ -14,6 +13,8 @@ type TProfile = {
 }
 
 export default async function ProfileList() {
+    const cookieStore = cookies()
+    const supabase = createClient(cookieStore);
     const {
         data: { user },
     } = await supabase.auth.getUser()
