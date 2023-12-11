@@ -54,7 +54,7 @@
   position: absolute;
   width: auto;
   z-index: 0 !important; */
-  @apply rounded-3xl;
+  @apply rounded-2xl;
 }
 
 .ui-resizable-handle {

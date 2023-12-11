@@ -9,7 +9,7 @@ export default function Page() {
     const supabase = createClient()
     const params = useParams()
     const [stores, setStores] = useState<any>()
-    
+
     // const items = [
     //     {
     //         "id": 0.07586734971435094,
@@ -71,18 +71,18 @@ export default function Page() {
     //     }
     // ]
 
-    const items = [
-        {
-            "id": 0.07586734971435094,
-            "component_data": {
-                "type": "Paragraph",
-                "bg_color": "#D9D9D9",
-            },
-            "x": 1,
-            "y": 0,
-            "maxH": 4
-        }
-    ]
+    // const items = [
+    //     {
+    //         "id": 0.07586734971435094,
+    //         "component_data": {
+    //             "type": "Paragraph",
+    //             "bg_color": "#D9D9D9",
+    //         },
+    //         "x": 1,
+    //         "y": 0,
+    //         "maxH": 4
+    //     }
+    // ]
 
     useEffect(() => {
         async function getProfileData() {
@@ -101,16 +101,19 @@ export default function Page() {
         <>
             <div className='flex md:flex-row w-full justify-between p-5 flex-col max-w-7xl'>
                 {stores &&
-                    <div className='flex flex-col gap-3 my-5'>
-                        <h2 className='text-5xl font-black tracking-tighter'>{stores.full_name}</h2>
-                        <p className='text-2xl'>{stores.description}</p>
-                    </div>
+                    <>
+                        <div className='flex flex-col gap-3 my-5'>
+                            <h2 className='text-5xl font-black tracking-tighter'>{stores.full_name}</h2>
+                            <p className='text-2xl'>{stores.description}</p>
+                        </div>
+                        <div className='flex-grow max-w-[600px]'>
+                            <div className='w-full'>
+                                <WidgetGrid someArray={stores.components} />
+                                
+                            </div>
+                        </div>
+                    </>
                 }
-                <div className='flex-grow max-w-[600px]'>
-                    <div className='w-full'>
-                        <WidgetGrid someArray={items} />
-                    </div>
-                </div>
             </div>
 
 
