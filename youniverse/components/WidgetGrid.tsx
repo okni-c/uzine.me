@@ -6,10 +6,10 @@ import React from 'react'
 import { Sketch } from '@uiw/react-color'
 import ComponentLoader from './widgets/utils/ComponentLoader'
 
-export default function WidgetGrid({ someArray }: any) {
+export default function WidgetGrid({ widgets, supabase, slug }: any) {
     const gridRef = useRef<any>(null);
     const refs = useRef<any>([])
-    const [widgetArray, setWidgetArray] = useState<any>(someArray)
+    const [widgetArray, setWidgetArray] = useState<any>(widgets)
 
     useEffect(() => {
         // Initialize GridStack when the component mounts
@@ -39,12 +39,18 @@ export default function WidgetGrid({ someArray }: any) {
         });
     }
 
-    function saveFullGrid() {
+    async function saveFullGrid() {
         const grid = gridRef.current;
         let serializedFull = grid.save(false, true);
         console.log(serializedFull.children)
 
         setWidgetArray(serializedFull.children)
+
+        const { error } = await supabase
+                .from('user_profiles')
+                .update({components: serializedFull.children})
+                .eq('slug', slug)
+        return console.log(error)
 
     }
 

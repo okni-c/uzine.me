@@ -108,7 +108,7 @@ export default function Page() {
                         </div>
                         <div className='flex-grow max-w-[600px]'>
                             <div className='w-full'>
-                                <WidgetGrid someArray={stores.components} />
+                                <WidgetGrid widgets={stores.components} supabase={supabase} slug={params.slug} />
                                 
                             </div>
                         </div>
