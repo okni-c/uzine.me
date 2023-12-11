@@ -5,6 +5,7 @@ import { GridStack } from 'gridstack'
 import React from 'react'
 import { Sketch } from '@uiw/react-color'
 import ComponentLoader from './widgets/utils/ComponentLoader'
+import _debounce from 'lodash.debounce'
 
 export default function WidgetGrid({ widgets, supabase, slug }: any) {
     const gridRef = useRef<any>(null);
@@ -40,18 +41,19 @@ export default function WidgetGrid({ widgets, supabase, slug }: any) {
     }
 
     async function saveFullGrid() {
+        // This will run instantly always
         const grid = gridRef.current;
         let serializedFull = grid.save(false, true);
         console.log(serializedFull.children)
 
         setWidgetArray(serializedFull.children)
 
+        // I want to debounce this await only
         const { error } = await supabase
-                .from('user_profiles')
-                .update({components: serializedFull.children})
-                .eq('slug', slug)
+            .from('user_profiles')
+            .update({ components: serializedFull.children })
+            .eq('slug', slug)
         return console.log(error)
-
     }
 
     function addEvents(grid: any) {
@@ -66,7 +68,6 @@ export default function WidgetGrid({ widgets, supabase, slug }: any) {
         const grid = gridRef.current;
         widgetArray.forEach((item: any) => {
             if (refs.current[item.id].current) {
-                //console.log('running useeffect')
                 grid.removeWidget(refs.current[item.id].current)
                 grid.addWidget(refs.current[item.id].current, item)
             }
@@ -113,7 +114,29 @@ export default function WidgetGrid({ widgets, supabase, slug }: any) {
         const [deleteDialog, setDeleteDialog] = useState<boolean>(false);
         const [optionsDialog, setOptionsDialog] = useState<boolean>(false);
         const [showColor, setShowColor] = useState<boolean>(false);
-        const [hex, setHex] = useState<any>(item.component_data.bg_color)
+        const [hex, setHex] = useState<any>(item.component_data.bg_color);
+
+        // const debouncedSaveFullGrid = _debounce(saveFullGrid, 10000);
+
+        const [timerRunning, setTimerRunning] = useState(false);
+
+        useEffect(() => {
+            if (hex && !timerRunning) {
+                // Start the timer only if hex is truthy and the timer is not already running
+                const timerId = setTimeout(() => {
+                    // After 10 seconds, run the save function and stop the timer
+                    // saveFullGrid();
+                    console.log('Saving!')
+                    setTimerRunning(false);
+                }, 10000);
+
+                // Set the timerRunning state to true
+                setTimerRunning(true);
+
+                // Cleanup function to clear the timer if hex changes before the 10 seconds elapse
+                return () => clearTimeout(timerId);
+            }
+        }, [hex, timerRunning]);
 
         return (
             <>
@@ -164,7 +187,7 @@ export default function WidgetGrid({ widgets, supabase, slug }: any) {
                                         setHex(color.hex);
                                     }}
                                     disableAlpha={true}
-                                    /> : null}
+                                /> : null}
                             </>
                         ) : null}
                     </>
