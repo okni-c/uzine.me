@@ -1,14 +1,16 @@
 import { createClient } from '@/utils/supabase/server';
 import { cookies } from 'next/headers';
-import NoteBody from './ProfileLink';
+import ProfileLink from './ProfileLink';
+import { UUID } from 'crypto';
 
 
 
 type TProfile = {
+    id: UUID,
     slug: string,
-    full_name: string,
-    created_date: Date,
-    components: Object[],
+    display_name: string,
+    created_at: Date,
+    widget_data: Object[],
     description: string
 }
 
@@ -20,12 +22,12 @@ export default async function ProfileList() {
     } = await supabase.auth.getUser()
 
     if (user) {
-        const { data: profiles } = await supabase.from("user_profiles").select()
+        const { data: profiles } = await supabase.from("user_sites").select()
         return (
             <>
-                <h2>Profiles on file:</h2>
+                <h2>Sites on file:</h2>
                 {profiles && profiles.map((profile: TProfile) => (
-                    <NoteBody key={profile.slug} data={profile} />
+                    <ProfileLink key={profile.slug} data={profile} />
                 ))}
 
             </>
@@ -33,6 +35,6 @@ export default async function ProfileList() {
     }
 
     if (!user) {
-        return <pre>Please log in to view notes.</pre>
+        return <pre>Please log in to view data.</pre>
     }
 }

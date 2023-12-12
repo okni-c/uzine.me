@@ -1,7 +1,3 @@
-// import { useRouter } from 'next/navigation';
-// import { createClient } from '@/utils/supabase/client';
-// import { useRef, useState } from 'react';
-
 import Link from "next/link";
 
 export default function ProfileLink({ data }: any) {
@@ -29,15 +25,15 @@ export default function ProfileLink({ data }: any) {
     //     router.refresh()
     // }
 
-    let formattedDate = new Date(data.created_date).toLocaleString();
+    let formattedDate = new Date(data.created_at).toLocaleString();
 
     return (
-        <Link href={`/${data.slug}`} className='border border-emerald-400 rounded-lg px-4 py-3 my-1 flex flex-col gap-2'>
+        <Link href={`/${data.slug}`} className='border border-emerald-400 rounded-lg px-4 py-3 my-1 flex flex-col gap-2 hover:scale-[1.02] transition-all duration-150 max-h-80 overflow-y-auto drop-shadow-lg'>
             <pre>Slug: {data.slug}</pre>
-            <pre>Name: {data.full_name}</pre>
+            <pre>Name: {data.display_name}</pre>
             <pre>Description: {data.description}</pre>
             <pre className='text-sm'>Created: {formattedDate}</pre>
-            <pre>Components: {JSON.stringify(data.components, null, 2)}</pre>
+            <pre>Widgets: {JSON.stringify(data.widget_data, null, 4)}</pre>
         </Link>
     )
 
