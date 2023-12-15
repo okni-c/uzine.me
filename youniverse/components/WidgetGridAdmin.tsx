@@ -202,9 +202,6 @@ export default function WidgetGridAdmin({ widgets, supabase, slug }: any) {
     return (
         <>
             <div className='flex flex-row gap-3 my-1 rounded-xl border border-[rgba(12, 12, 12, 0.50)] bg-[rgba(0, 0, 0, 0.12)] p-2 w-min items-center shadow-sm'>
-                {/* <button onClick={saveFullGrid} className='border-4 border-black p-3 rounded-xl'>Save Full Grid</button>
-                <button onClick={() => addWidget('Paragraph')} className='border-4 border-black p-3 rounded-xl'>Add Paragraph</button>
-                <button onClick={() => addWidget('Image')} className='border-4 border-black p-3 rounded-xl'>Add Image</button> */}
                 <button className='bg-green-400 rounded-lg text-sm px-4 py-1 h-[32px] text-white font-semibold'>Share</button>
                 <div className='h-[20px] w-[2px] bg-neutral-200 rounded-full'></div>
                 <button className='edit-tray-btn'><img src='/link-button.svg' className='h-[15px]' /></button>
