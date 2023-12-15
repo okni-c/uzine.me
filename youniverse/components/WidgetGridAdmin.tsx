@@ -6,6 +6,7 @@ import React from 'react'
 import { Sketch } from '@uiw/react-color'
 import ComponentLoader from './widgets/utils/ComponentLoader'
 import _debounce from 'lodash.debounce'
+import toast, { Toaster } from 'react-hot-toast';
 
 export default function WidgetGridAdmin({ widgets, supabase, slug }: any) {
     const gridRef = useRef<any>(null);
@@ -133,6 +134,28 @@ export default function WidgetGridAdmin({ widgets, supabase, slug }: any) {
     async function copyToClip() {
         await navigator.clipboard.writeText(window.location.toString())
         console.log(window.location.toString())
+        toast('Copied to clipboard!', {
+            duration: 2000,
+            position: 'top-center',
+          
+            // Styling
+            className: '',
+          
+            // Custom Icon
+            icon: '📋',
+          
+            // Change colors of success/error/loading icon
+            iconTheme: {
+              primary: '#000',
+              secondary: '#fff',
+            },
+          
+            // Aria
+            ariaProps: {
+              role: 'status',
+              'aria-live': 'polite',
+            },
+          });
     }
 
     const Widget = ({ item }: any) => {
@@ -223,6 +246,7 @@ export default function WidgetGridAdmin({ widgets, supabase, slug }: any) {
 
     return (
         <>
+        <Toaster />
             <div className='flex flex-row gap-3 my-1 rounded-xl border border-[rgba(12, 12, 12, 0.50)] bg-[rgba(0, 0, 0, 0.12)] p-2 w-min items-center shadow-sm'>
                 <button className='bg-green-400 rounded-lg text-sm px-4 py-1 h-[32px] text-white font-semibold' onClick={() => copyToClip()}>Share</button>
                 <div className='h-[20px] w-[2px] bg-neutral-200 rounded-full'></div>
