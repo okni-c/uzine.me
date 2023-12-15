@@ -6,6 +6,7 @@ import { useState } from 'react';
 import WidgetGridAdmin from '@/components/WidgetGridAdmin';
 import WidgetGridGuest from '@/components/WidgetGridGuest';
 import AuthButton from '@/components/AuthButton';
+import Image from 'next/image';
 
 export default function Page() {
     const supabase = createClient()
@@ -54,17 +55,18 @@ export default function Page() {
 
     return (
         <>
-            <div className='flex md:flex-row w-full justify-between p-5 flex-col max-w-7xl'>
+            <div className='flex md:flex-row w-full justify-between flex-row max-w-[1600px] p-14'>
                 {stores ? (
-                    <div className='w-full flex flex-col gap-5'>
-                        {isUser ? <p className='text-green-500 font-bold text-2xl mb-24'>This is your account.</p> : <p className='text-red-500 font-bold text-2xl mb-24'>This is not your account.</p>}
+                    <div className='w-full flex gap-10 justify-between relative animate-in'>
+                        {isUser ? <p className='text-green-500 font-bold text-xs absolute top-0 left-0'>This is your account.</p> : <p className='text-red-500 font-bold text-xs absolute'>This is not your account.</p>}
                         <div className='flex flex-col gap-3 my-5'>
-                            <h2 className='text-5xl font-black tracking-tighter'>{stores.display_name}</h2>
-                            <p className='text-2xl'>{stores.description}</p>
+                            <Image src={'/profile_picture.webp'} alt={'Profile Picture'} height={184} width={184} className='rounded-full max-w-[184px] max-h-[184px] aspect-square object-cover' />
+                            <h2 className='text-[36px] md:text-[44px] font-bold tracking-tighter'>Kevin Dallas Yatsinko</h2>
+                            <p className='text-[20px] text-[#454545]'>{stores.description}</p>
                         </div>
-                        {/* <pre>Session Cookie: {JSON.stringify(isAuth, null, 6)}</pre>
-                        <pre>Stores: {JSON.stringify(stores, null, 6)}</pre> */}
-                        {isUser ? <WidgetGridAdmin widgets={stores.widget_data} supabase={supabase} slug={params.slug} /> : <WidgetGridGuest widgets={stores.widget_data} isAuth={isAuth} />}
+                        <div className='max-w-[850px] w-full'>
+                        {isUser ? <WidgetGridAdmin widgets={stores.widget_data} supabase={supabase} slug={params.slug} /> : <WidgetGridGuest widgets={stores.widget_data} isUser={isUser} />}
+                        </div>
                     </div>
                 ) : null}
             </div>

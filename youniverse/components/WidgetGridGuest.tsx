@@ -15,6 +15,7 @@ export default function WidgetGridGuest({ widgets, isAuth }: any) {
         // Initialize GridStack when the component mounts
         gridRef.current = GridStack.init({
             column: 4,
+            maxRow: 6,
             resizable: {
                 handles: 'n,s,e,w'
             },
@@ -57,7 +58,7 @@ export default function WidgetGridGuest({ widgets, isAuth }: any) {
 
     return (
         <>
-                <div className="grid-stack max-w-[600px]">
+                <div className="grid-stack">
                     {widgetArray.map((item: any) => {
                         return (
                             <div

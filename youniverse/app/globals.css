@@ -35,6 +35,7 @@
     opacity: 0;
     transform: translateY(10px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -45,16 +46,24 @@
   @apply border-2 border-neutral-300 rounded-2xl p-2 bg-white;
 }
 
+/* .grid-stack-item {
+  @apply !transition-all !ease-linear;
+} */
+
 
 /* Inject into gridstackCSS */
 
-.grid-stack-placeholder > .placeholder-content {
+.grid-stack-placeholder>.placeholder-content {
   /* background-color: rgba(0, 0, 0, 0.1);
   margin: 0;
   position: absolute;
   width: auto;
   z-index: 0 !important; */
   @apply rounded-2xl;
+}
+
+.grid-stack-item-content {
+  @apply !rounded-2xl;
 }
 
 .ui-resizable-handle {
@@ -77,28 +86,32 @@
   @apply !right-[-1px] !w-[6px] !max-h-[69px] !my-auto;
 }
 
-.delete-btn-hover:hover > svg {
- @apply fill-[#454545];
+.delete-btn-hover:hover>svg {
+  @apply fill-[#454545];
+}
+
+.edit-tray-btn {
+  @apply w-[32px] h-[32px] text-sm rounded-lg border flex items-center justify-center hover:bg-neutral-100 transition-colors duration-150 ease-in-out;
 }
 
 /* ===== Scrollbar CSS ===== */
-  /* Firefox */
-  * {
-    scrollbar-width: auto;
-    scrollbar-color: #454545 #ffffff;
-  }
+/* Firefox */
+* {
+  scrollbar-width: auto;
+  scrollbar-color: #454545 #ffffff;
+}
 
-  /* Chrome, Edge, and Safari */
-  *::-webkit-scrollbar {
-    width: 10px;
-  }
+/* Chrome, Edge, and Safari */
+*::-webkit-scrollbar {
+  width: 10px;
+}
 
-  *::-webkit-scrollbar-track {
-    background: transparent;
-  }
+*::-webkit-scrollbar-track {
+  background: transparent;
+}
 
-  *::-webkit-scrollbar-thumb {
-    background-color: #454545;
-    border-radius: 10px;
-    border: 1px solid #ffffff;
-  }
+*::-webkit-scrollbar-thumb {
+  background-color: #454545;
+  border-radius: 10px;
+  border: 1px solid #ffffff;
+}
