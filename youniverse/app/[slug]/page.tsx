@@ -55,16 +55,16 @@ export default function Page() {
 
     return (
         <>
-            <div className='flex md:flex-row w-full justify-between flex-row max-w-[1600px] p-14'>
+            <div className='flex w-full justify-between flex-row max-w-[1400px] p-14'>
                 {stores ? (
-                    <div className='w-full flex gap-10 justify-between relative animate-in'>
+                    <div className='w-full flex xl:flex-row flex-col gap-10 justify-between relative animate-in'>
                         {isUser ? <p className='text-green-500 font-bold text-xs absolute top-0 left-0'>This is your account.</p> : <p className='text-red-500 font-bold text-xs absolute'>This is not your account.</p>}
-                        <div className='flex flex-col gap-3 my-5'>
-                            <Image src={'/profile_picture.webp'} alt={'Profile Picture'} height={184} width={184} className='rounded-full max-w-[184px] max-h-[184px] aspect-square object-cover' />
+                        <div className='flex flex-col justify-center items-center xl:items-start xl:justify-start gap-3 my-5'>
+                            <Image src={'/profile_picture.webp'} alt={'Profile Picture'} height={184} width={184} className='rounded-full max-w-[184px] max-h-[184px] xl:h-full xl:w-full h-[100px] w-[100px] aspect-square object-cover' />
                             <h2 className='text-[36px] md:text-[44px] font-bold tracking-tighter'>Kevin Yatsinko</h2>
                             <p className='text-[20px] text-[#454545]'>{stores.description}<br />I do cool stuff with React.</p>
                         </div>
-                        <div className='max-w-[850px] w-full'>
+                        <div className='max-w-[850px] w-full mx-auto'>
                             {isUser ? <WidgetGridAdmin widgets={stores.widget_data} supabase={supabase} slug={params.slug} /> : <WidgetGridGuest widgets={stores.widget_data} isUser={isUser} />}
                         </div>
                     </div>

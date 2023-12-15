@@ -15,6 +15,7 @@ export default function WidgetGridAdmin({ widgets, supabase, slug }: any) {
     useEffect(() => {
         // Initialize GridStack when the component mounts
         gridRef.current = GridStack.init({
+            // Need to figure out how to make this column 2 on mobile only
             column: 4,
             maxRow: 6,
             resizable: {
