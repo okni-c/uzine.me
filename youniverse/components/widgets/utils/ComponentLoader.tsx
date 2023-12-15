@@ -1,10 +1,12 @@
 import ParagraphWDG from "../ParagraphWDG";
 import ImageWDG from "../ImageWDG";
+import GitHubWDG from "../GitHubWDG";
 
 export default function ComponentLoader ({ component, hex, isAuth }: any) {
     const componentMappings: any = {
         Paragraph: ParagraphWDG,
         Image: ImageWDG,
+        GitHub: GitHubWDG,
         // Add other mappings as needed
     };
 

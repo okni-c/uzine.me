@@ -19,7 +19,7 @@ export default function ParagraphWDG({ text, id, hex, isUser }: any) {
 
             </div>
             ) :
-                <div className='w-full h-full flex flex-col relative grid-stack-border' style={{ backgroundColor: hex }}>
+                <div className='w-full h-full flex flex-col relative grid-stack-border !border-[rgba(12, 12, 12, 0.19)]' style={{ backgroundColor: hex }}>
                     <p className='bg-transparent font-bold text-xl break-words overscroll-x-none w-full h-full resize-none p-1 focus-visible:outline-neutral-400 rounded-lg !overflow-y-auto'>{value}</p>
                 </div>
             }

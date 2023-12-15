@@ -91,6 +91,18 @@ export default function WidgetGridAdmin({ widgets, supabase, slug }: any) {
                 },
             };
             setWidgetArray([...widgetArray, newItem]);
+        } else if (type == 'GitHub') {
+            const newItem = {
+                id: Math.random(),
+                "w": 1,
+                "h": 1,
+                'maxH': 2,
+                'maxW': 2,
+                component_data: {
+                    type: type,
+                },
+            };
+            setWidgetArray([...widgetArray, newItem]);
         } else {
             const newItem = {
                 id: Math.random(),
@@ -111,6 +123,11 @@ export default function WidgetGridAdmin({ widgets, supabase, slug }: any) {
         let newArr = widgetArray.filter((item: any) => item.id !== id)
         setWidgetArray([...newArr]);
         grid.removeWidget(refs.current[id].current, false);
+    }
+
+    async function copyToClip() {
+        await navigator.clipboard.writeText(window.location.toString())
+        console.log(window.location.toString())
     }
 
     const Widget = ({ item }: any) => {
@@ -202,13 +219,13 @@ export default function WidgetGridAdmin({ widgets, supabase, slug }: any) {
     return (
         <>
             <div className='flex flex-row gap-3 my-1 rounded-xl border border-[rgba(12, 12, 12, 0.50)] bg-[rgba(0, 0, 0, 0.12)] p-2 w-min items-center shadow-sm'>
-                <button className='bg-green-400 rounded-lg text-sm px-4 py-1 h-[32px] text-white font-semibold'>Share</button>
+                <button className='bg-green-400 rounded-lg text-sm px-4 py-1 h-[32px] text-white font-semibold' onClick={() => copyToClip()}>Share</button>
                 <div className='h-[20px] w-[2px] bg-neutral-200 rounded-full'></div>
-                <button className='edit-tray-btn'><img src='/link-button.svg' className='h-[15px]' /></button>
+                <button disabled={true} className='edit-tray-btn'><img src='/link-button.svg' className='h-[15px]' /></button>
                 <button className='edit-tray-btn' onClick={() => addWidget('Image')}><img src='/img-button.svg' className='h-[15px]' /></button>
                 <button className='edit-tray-btn' onClick={() => addWidget('Paragraph')}><img src='/text-button.svg' className='h-[15px]' /></button>
-                <button className='edit-tray-btn'><img src='/map-button.svg' className='h-[15px]' /></button>
-                <button className='edit-tray-btn'><img src='/github-button.svg' className='h-[20px]' /></button>
+                <button disabled={true} className='edit-tray-btn'><img src='/map-button.svg' className='h-[15px]' /></button>
+                <button className='edit-tray-btn' onClick={() => addWidget('GitHub')}><img src='/github-button.svg' className='h-[20px]' /></button>
             </div>
 
             <div className="grid-stack">

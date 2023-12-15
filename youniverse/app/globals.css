@@ -43,7 +43,7 @@
 }
 
 .grid-stack-border {
-  @apply border border-neutral-300 rounded-2xl p-2 bg-white;
+  @apply border rounded-2xl p-2 bg-white;
 }
 
 /* .grid-stack-item {
@@ -59,6 +59,9 @@
   position: absolute;
   width: auto;
   z-index: 0 !important; */
+  box-shadow: 10px 10px 17px 0px rgba(0, 0, 0, 0.15) inset;
+  -webkit-box-shadow: 10px 10px 17px 0px rgba(0, 0, 0, 0.15) inset;
+  -moz-box-shadow: 10px 10px 17px 0px rgba(0, 0, 0, 0.15) inset;
   @apply rounded-2xl;
 }
 
@@ -91,7 +94,7 @@
 }
 
 .edit-tray-btn {
-  @apply w-[32px] h-[32px] text-sm rounded-lg border flex items-center justify-center hover:bg-neutral-100 transition-colors duration-150 ease-in-out;
+  @apply w-[32px] h-[32px] text-sm rounded-lg border flex items-center justify-center hover:bg-neutral-100 transition-colors duration-150 ease-in-out disabled:cursor-not-allowed disabled:bg-neutral-300 disabled:opacity-50 disabled:hover:bg-neutral-300;
 }
 
 /* ===== Scrollbar CSS ===== */
