@@ -56,9 +56,9 @@ export default function Page() {
                     <div className='w-full flex xl:flex-row flex-col gap-10 justify-between relative animate-in'>
                         {isUser ? <p className='text-green-500 font-bold text-xs absolute top-0 left-0'>This is your account.</p> : <p className='text-red-500 font-bold text-xs absolute'>This is not your account.</p>}
                         <div className='flex flex-col justify-center items-center xl:items-start xl:justify-start gap-3 my-5'>
-                            <ProfileHeading isAdmin={isUser} data={stores} supabase={supabase} />
+                            <ProfileHeading isAdmin={isUser} user_data={stores} supabase={supabase} />
                         </div>
-                        <div className='max-w-[850px] w-full mx-auto'>
+                        <div className='max-w-[820px] w-full mx-auto'>
                             {isUser ? <WidgetGridAdmin widgets={stores.widget_data} supabase={supabase} slug={params.slug} /> : <WidgetGridGuest widgets={stores.widget_data} isUser={isUser} />}
                         </div>
                     </div>

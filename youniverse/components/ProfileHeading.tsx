@@ -1,50 +1,79 @@
 import Image from "next/image";
 import { useRef, useState } from "react";
+import { v4 as uuidv4 } from 'uuid';
 
-export default function ProfileHeading({ isAdmin, data, supabase }: any) {
-    const [newPicture, setNewPicture] = useState<any>('/profile_picture.webp')
-    const uploadRef = useRef(null)
+export default function ProfileHeading({ isAdmin, user_data, supabase }: any) {
+    const [newPicture, setNewPicture] = useState<any>(user_data.avatar_src || '/profile_picture.webp')
 
-    const uploadPicture = () => {
-        uploadRef.current.click()
+    const uploadRef = useRef<HTMLInputElement | null>(null)
+
+    const clickInput = () => {
+        uploadRef.current && uploadRef.current.click()
     }
 
-    const handleFileChange = async (e: any) => {
+    const handleFileUpload = async (e: any) => {
         const file = e.target.files[0];
         if (file) {
-            // Do something with the file, for example, upload it to a server
-            console.log('Selected file:', file);
             setNewPicture(URL.createObjectURL(file));
+
+            let tempUploadPath = user_data.id + '/' + uuidv4();
 
             const { data, error } = await supabase
                 .storage
                 .from('profile_pictures')
-                .upload(file, {
-                    cacheControl: '3600',
-                    upsert: false
-            })
+                .upload(tempUploadPath, file)
+            if (data) {
+                console.log(data)
+                getMedia(tempUploadPath);
+            } else {
+                console.error(error)
+            }
 
-            console.log(data)
         }
     };
+
+    const getMedia = async (tempUploadPath: string) => {
+        const { data, error } = await supabase
+            .storage
+            .from('profile_pictures')
+            .getPublicUrl(tempUploadPath)
+
+        if (data) {
+            console.log(data)
+            setNewPicture(data.publicUrl)
+            postNewPicture(data.publicUrl)
+        } else {
+            console.error(error)
+        }
+    }
+
+    const postNewPicture = async (avatarSrc: string) => {
+        const { error } = await supabase
+            .from('user_sites')
+            .update({ avatar_src: avatarSrc })
+            .eq('id', user_data.id)
+        if (error) {
+            console.error(error)
+        }
+    }
 
     return (
         <>
             {!isAdmin ? (
                 <>
                     <Image src={newPicture} alt={'Profile Picture'} height={184} width={184} className='rounded-full max-w-[184px] max-h-[184px] xl:h-full xl:w-full h-[100px] w-[100px] aspect-square object-cover' />
-                    <h2 className='text-[36px] md:text-[44px] font-bold tracking-tighter'>{data.display_name}</h2>
-                    <p className='text-[20px] text-[#454545]'>{data.description}<br />I do cool stuff with React.</p>
+                    <h2 className='text-[36px] md:text-[44px] font-bold tracking-tighter'>{user_data.display_name}</h2>
+                    <p className='text-[20px] text-[#454545]'>{user_data.description}<br />I do cool stuff with React.</p>
                 </>
             ) : (
                 <>
                     <div className="relative group">
-                        <input ref={uploadRef} onChange={handleFileChange} type="file" accept="image/*" size={1048576} className="hidden m-0 p-0 h-0 w-0" />
-                        <button className='group-hover:opacity-100 opacity-0 w-[30px] h-[30px] self-center rounded-lg absolute bottom-0 right-1 z-[99999] flex items-center justify-center bg-[#FFFFFF] border border-[#4545453b] hover:bg-[#d9d9d9] delete-btn-hover transition-all duration-100 ease-linear' onClick={() => uploadPicture()}><img src='/img-button.svg' className='h-[15px] opacity-0 group-hover:opacity-100' /></button>
+                        <input ref={uploadRef} onChange={handleFileUpload} type="file" accept="image/*" size={1048576} className="hidden m-0 p-0 h-0 w-0" />
+                        <button className='group-hover:opacity-100 opacity-0 w-[30px] h-[30px] self-center rounded-lg absolute bottom-0 right-1 z-[99999] flex items-center justify-center bg-[#FFFFFF] border border-[#4545453b] hover:bg-[#d9d9d9] delete-btn-hover transition-all duration-100 ease-linear' onClick={() => clickInput()}><img src='/img-button.svg' className='h-[15px] opacity-0 group-hover:opacity-100' /></button>
                         <Image src={newPicture} alt={'Profile Picture'} height={184} width={184} className='rounded-full xl:h-[185px] xl:w-[185px] h-[100px] w-[100px] aspect-square object-cover' />
                     </div>
-                    <h2 className='text-[36px] md:text-[44px] font-bold tracking-tighter'>{data.display_name}</h2>
-                    <p className='text-[20px] text-[#454545]'>{data.description}<br />I do cool stuff with React.</p>
+                    <h2 className='text-[36px] md:text-[44px] font-bold tracking-tighter'>{user_data.display_name}</h2>
+                    <p className='text-[20px] text-[#454545]'>{user_data.description}<br />I do cool stuff with React.</p>
                 </>
             )}
         </>

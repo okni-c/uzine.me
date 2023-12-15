@@ -42,6 +42,7 @@ export default function WidgetGridAdmin({ widgets, supabase, slug }: any) {
         });
     }
 
+
     async function saveFullGrid() {
         // This will run instantly always
         const grid = gridRef.current;
@@ -88,7 +89,10 @@ export default function WidgetGridAdmin({ widgets, supabase, slug }: any) {
                 'maxW': 2,
                 component_data: {
                     type: type,
-                    bg_color: '#FFFFFF'
+                    bg_color: '#fc4903',
+                    props: {
+                        text: 'Welcome, add some new widgets!'
+                    }
                 },
             };
             setWidgetArray([...widgetArray, newItem]);
@@ -135,7 +139,7 @@ export default function WidgetGridAdmin({ widgets, supabase, slug }: any) {
         const [deleteDialog, setDeleteDialog] = useState<boolean>(false);
         const [optionsDialog, setOptionsDialog] = useState<boolean>(false);
         const [showColor, setShowColor] = useState<boolean>(false);
-        const [hex, setHex] = useState<any>(item.component_data.bg_color);
+        const [hex, setHex] = useState<any>(item.component_data.bg_color || "#FFFFFF");
 
         // const debouncedSaveFullGrid = _debounce(saveFullGrid, 10000);
 
