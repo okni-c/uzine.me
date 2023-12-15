@@ -1,8 +1,111 @@
-export default function ImageWDG ({ src, id, caption }: any) {
+import { useState, useRef } from "react";
+import toast, { Toaster } from 'react-hot-toast';
+import { v4 as uuidv4 } from 'uuid';
+
+export default function ImageWDG({ src, userId, caption, supabase, isAdmin, saveFullGrid }: any) {
+
+    const [newPicture, setNewPicture] = useState<any>(src || '/mountains_placeholder.png')
+    const prevNewPictureRef = useRef<any>(newPicture);
+    const uploadRef = useRef<HTMLInputElement | null>(null)
+
+    const clickInput = () => {
+        uploadRef.current && uploadRef.current.click()
+    }
+
+    const handleFileUpload = async (e: any) => {
+        const file = e.target.files[0];
+        if (file) {
+            prevNewPictureRef.current = newPicture;
+            setNewPicture(URL.createObjectURL(file));
+
+            let tempUploadPath = userId + '/' + uuidv4();
+
+            const myPromise = new Promise(async (resolve, reject) => {
+                try {
+                    const { data, error } = await supabase
+                        .storage
+                        .from('widget_images')
+                        .upload(tempUploadPath, file);
+
+                    if (data) {
+                        console.log(data);
+                        getMedia(tempUploadPath);
+                        resolve(data);
+                    } else {
+                        setNewPicture(prevNewPictureRef.current);
+                        reject(error);
+                    }
+                } catch (error) {
+                    setNewPicture(prevNewPictureRef.current);
+                    console.error(error);
+                    reject(error);
+                }
+            });
+
+            // Display the toast notification
+            toast.promise(
+                myPromise,
+                {
+                    loading: 'Uploading...',
+                    success: (data) => `Successfully uploaded!`,
+                    error: (error) => (`Error: ${error.error == 'Payload too large' ? 'File size is too large.' : error.error}`),
+                },
+                {
+                    className: 'border border-[rgba(12,12,12,0.19)]',
+                    style: {
+                        minWidth: '250px',
+                    },
+                    success: {
+                        duration: 1000,
+                    },
+                }
+            );
+        }
+    };
+
+    const getMedia = async (tempUploadPath: string) => {
+        const { data, error } = await supabase
+            .storage
+            .from('widget_images')
+            .getPublicUrl(tempUploadPath)
+
+        if (data) {
+            console.log(data)
+            setNewPicture(data.publicUrl)
+            saveFullGrid()
+        } else {
+            console.error(error)
+        }
+    }
+
+    // const postNewPicture = async (avatarSrc: string) => {
+    //     const { error } = await supabase
+    //         .from('user_sites')
+    //         .update({ avatar_src: avatarSrc })
+    //         .eq('id', userId)
+    //     if (error) {
+    //         console.error(error)
+    //     }
+    // }
+
     return (
-        <div className='w-full h-full flex flex-col relative rounded-2xl'>
-            <img src={src ? src : '/mountains_placeholder.png'} className='h-full w-full object-cover rounded-2xl pointer-events-none select-none border border-[rgba(12, 12, 12, 0.19)]' />
-            <p className='bg-white py-1 px-2 rounded-md absolute bottom-4 left-4 text-sm font-semibold drop-shadow-md border border-neutral-300 group'>Caption text goes here</p>
-        </div>
+        <>
+            {!isAdmin ? (
+                <div className='w-full h-full flex flex-col relative rounded-2xl'>
+                    <img src={src ? src : '/mountains_placeholder.png'} className='h-full w-full object-cover rounded-2xl pointer-events-none select-none border border-[rgba(12, 12, 12, 0.19)]' />
+                    <p className='bg-white py-1 px-2 rounded-md absolute bottom-4 left-4 text-sm font-semibold drop-shadow-md border border-neutral-300 group'>Caption text goes here</p>
+                </div>
+            ) : (
+                <>
+                    <Toaster />
+                    <div className='w-full h-full flex flex-col relative rounded-2xl'>
+                    <input ref={uploadRef} onChange={handleFileUpload} type="file" accept="image/*" size={1048576} className="hidden m-0 p-0 h-0 w-0" />
+                        <button className='group-hover:opacity-100 opacity-0 w-[30px] h-[30px] self-center rounded-lg absolute bottom-0 right-[-10px] z-[99999] flex items-center justify-center bg-[#FFFFFF] border border-[#4545453b] hover:bg-[#d9d9d9] delete-btn-hover transition-all duration-100 ease-linear' onClick={() => clickInput()}><img src='/upload-button.svg' className='h-[15px] opacity-0 group-hover:opacity-100' /></button>
+                        <img src={newPicture} className='h-full w-full object-cover rounded-2xl pointer-events-none select-none border border-[rgba(12, 12, 12, 0.19)]' />
+                        <p className='bg-white py-1 px-2 rounded-md absolute bottom-4 left-4 text-sm font-semibold drop-shadow-md border border-neutral-300 group'>Caption text goes here</p>
+                    </div>
+                </>
+            )}
+        </>
     )
 }

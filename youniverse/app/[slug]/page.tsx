@@ -59,7 +59,7 @@ export default function Page() {
                             <ProfileHeading isAdmin={isUser} user_data={stores} supabase={supabase} />
                         </div>
                         <div className='max-w-[820px] w-full mx-auto'>
-                            {isUser ? <WidgetGridAdmin widgets={stores.widget_data} supabase={supabase} slug={params.slug} /> : <WidgetGridGuest widgets={stores.widget_data} isUser={isUser} />}
+                            {isUser ? <WidgetGridAdmin widgets={stores.widget_data} supabase={supabase} slug={params.slug} isAdmin={isUser} userId={isAuth.user.id} /> : <WidgetGridGuest widgets={stores.widget_data} isUser={isUser} />}
                         </div>
                     </div>
                 ) : null}

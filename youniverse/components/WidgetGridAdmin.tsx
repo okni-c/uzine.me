@@ -8,7 +8,7 @@ import ComponentLoader from './widgets/utils/ComponentLoader'
 import _debounce from 'lodash.debounce'
 import toast, { Toaster } from 'react-hot-toast';
 
-export default function WidgetGridAdmin({ widgets, supabase, slug }: any) {
+export default function WidgetGridAdmin({ widgets, supabase, slug, isAdmin, userId }: any) {
     const gridRef = useRef<any>(null);
     const refs = useRef<any>([])
     const [widgetArray, setWidgetArray] = useState<any>(widgets)
@@ -139,26 +139,14 @@ export default function WidgetGridAdmin({ widgets, supabase, slug }: any) {
             position: 'top-center',
           
             // Styling
-            className: '',
+            className: 'border border-[rgba(12,12,12,0.19)]',
           
             // Custom Icon
             icon: '📋',
-          
-            // Change colors of success/error/loading icon
-            iconTheme: {
-              primary: '#000',
-              secondary: '#fff',
-            },
-          
-            // Aria
-            ariaProps: {
-              role: 'status',
-              'aria-live': 'polite',
-            },
           });
     }
 
-    const Widget = ({ item }: any) => {
+    const Widget = ({ item, supabase }: any) => {
         const [deleteDialog, setDeleteDialog] = useState<boolean>(false);
         const [optionsDialog, setOptionsDialog] = useState<boolean>(false);
         const [showColor, setShowColor] = useState<boolean>(false);
@@ -203,7 +191,7 @@ export default function WidgetGridAdmin({ widgets, supabase, slug }: any) {
                             </div>
                         </div>
                     ) : null}
-                    <ComponentLoader component={item} hex={hex} />
+                    <ComponentLoader component={item} hex={hex} supabase={supabase} isAdmin={isAdmin} userId={userId} saveFullGrid={saveFullGrid} />
                 </div>
                 {/* Paragraph Widget Formatting */}
                 {item.component_data.type === 'Paragraph' ? (
@@ -247,7 +235,7 @@ export default function WidgetGridAdmin({ widgets, supabase, slug }: any) {
     return (
         <>
         <Toaster />
-            <div className='flex flex-row gap-3 my-1 rounded-xl border border-[rgba(12, 12, 12, 0.50)] bg-[rgba(0, 0, 0, 0.12)] p-2 w-min items-center shadow-sm'>
+            <div className='flex flex-row gap-3 my-1 rounded-xl border border-[rgba(12, 12, 12, 0.50)] bg-[rgba(0, 0, 0, 0.12)] p-2 w-min items-center shadow-sm ml-[10px]'>
                 <button className='bg-green-400 rounded-lg text-sm px-4 py-1 h-[32px] text-white font-semibold' onClick={() => copyToClip()}>Share</button>
                 <div className='h-[20px] w-[2px] bg-neutral-200 rounded-full'></div>
                 <button disabled={true} className='edit-tray-btn'><img src='/link-button.svg' className='h-[15px]' /></button>
@@ -265,7 +253,7 @@ export default function WidgetGridAdmin({ widgets, supabase, slug }: any) {
                             key={item.id}
                             className={'grid-stack-item relative group'}
                         >
-                            <Widget item={item} />
+                            <Widget item={item} supabase={supabase} />
                         </div>
                     )
                 })}
