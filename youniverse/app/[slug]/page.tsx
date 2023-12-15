@@ -6,7 +6,7 @@ import { useState } from 'react';
 import WidgetGridAdmin from '@/components/WidgetGridAdmin';
 import WidgetGridGuest from '@/components/WidgetGridGuest';
 import AuthButton from '@/components/AuthButton';
-import Image from 'next/image';
+import ProfileHeading from '@/components/ProfileHeading';
 
 export default function Page() {
     const supabase = createClient()
@@ -39,10 +39,6 @@ export default function Page() {
     }, [params.slug])
 
     useEffect(() => {
-        // if (isAuth.session.user.email === stores.email) {
-
-        // }
-
         if (isAuth && stores) {
             if (isAuth.user.id == stores.id) {
                 return setIsUser(true)
@@ -60,9 +56,7 @@ export default function Page() {
                     <div className='w-full flex xl:flex-row flex-col gap-10 justify-between relative animate-in'>
                         {isUser ? <p className='text-green-500 font-bold text-xs absolute top-0 left-0'>This is your account.</p> : <p className='text-red-500 font-bold text-xs absolute'>This is not your account.</p>}
                         <div className='flex flex-col justify-center items-center xl:items-start xl:justify-start gap-3 my-5'>
-                            <Image src={'/profile_picture.webp'} alt={'Profile Picture'} height={184} width={184} className='rounded-full max-w-[184px] max-h-[184px] xl:h-full xl:w-full h-[100px] w-[100px] aspect-square object-cover' />
-                            <h2 className='text-[36px] md:text-[44px] font-bold tracking-tighter'>Kevin Yatsinko</h2>
-                            <p className='text-[20px] text-[#454545]'>{stores.description}<br />I do cool stuff with React.</p>
+                            <ProfileHeading isAdmin={isUser} data={stores} supabase={supabase} />
                         </div>
                         <div className='max-w-[850px] w-full mx-auto'>
                             {isUser ? <WidgetGridAdmin widgets={stores.widget_data} supabase={supabase} slug={params.slug} /> : <WidgetGridGuest widgets={stores.widget_data} isUser={isUser} />}
