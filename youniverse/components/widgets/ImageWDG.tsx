@@ -50,7 +50,7 @@ export default function ImageWDG({ src, userId, caption, supabase, isAdmin, save
                 {
                     loading: 'Uploading...',
                     success: (data) => `Successfully uploaded!`,
-                    error: (error) => (`Error: ${error.error == 'Payload too large' ? 'File size is too large.' : error.error}`),
+                    error: (error) => (`Error: ${error.error == 'Payload too large' ? 'File size is too large (> 2MB)' : error.error}`),
                 },
                 {
                     className: 'border border-[rgba(12,12,12,0.19)]',
@@ -154,7 +154,7 @@ export default function ImageWDG({ src, userId, caption, supabase, isAdmin, save
                 <div className='w-full h-full flex flex-col relative rounded-2xl'>
                     <img src={src ? src : '/mountains_placeholder.png'} className='h-full w-full object-cover rounded-2xl pointer-events-none select-none border border-[rgba(12, 12, 12, 0.19)]' />
                     {caption ? (
-                        <p className='bg-white py-1 px-2 rounded-md absolute bottom-4 left-4 text-sm font-semibold drop-shadow-md border border-neutral-300 group'>{caption}</p>
+                        <p className='bg-white py-1 px-2 rounded-md mt-[-45px] mx-[15px] w-auto max-w-[300px] text-ellipsis text-sm font-semibold drop-shadow-md border border-neutral-300 group max-h-[30px]'>{caption}</p>
                     ) : (
                         null
                     )}
