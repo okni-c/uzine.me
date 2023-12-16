@@ -53,12 +53,37 @@ export default function WidgetGridAdmin({ widgets, supabase, slug, isAdmin, user
         setWidgetArray(serializedFull.children)
 
         // I want to debounce this await only
-        const { error } = await supabase
+        const { data, error } = await supabase
             .from('user_sites')
             .update({ widget_data: serializedFull.children })
             .eq('slug', slug)
+        
         return console.log(error)
     }
+
+    // function startTimer() {
+    //     let timer: NodeJS.Timeout | null = null;
+    
+    //     function saveAndLog() {
+    //         console.log('Saved!');
+    //         // Add your save logic here
+    //         saveFullGrid();
+    //     }
+    
+    //     function setTimer() {
+    //         // Clear the existing timer if it's running
+    //         if (timer) {
+    //             clearTimeout(timer);
+    //         }
+    
+    //         // Set a new timer
+    //         timer = setTimeout(saveAndLog, 3000); // 3000 milliseconds = 3 seconds
+    //     }
+    
+    //     return setTimer;
+    // }
+
+    // const setSaveTimer = startTimer();
 
     function addEvents(grid: any) {
         grid.on('resizestop', function () {
@@ -96,6 +121,7 @@ export default function WidgetGridAdmin({ widgets, supabase, slug, isAdmin, user
                     }
                 },
             };
+            saveFullGrid();
             setWidgetArray([...widgetArray, newItem]);
         } else if (type == 'GitHub') {
             const newItem = {
@@ -108,6 +134,7 @@ export default function WidgetGridAdmin({ widgets, supabase, slug, isAdmin, user
                     type: type,
                 },
             };
+            saveFullGrid();
             setWidgetArray([...widgetArray, newItem]);
         } else {
             const newItem = {
@@ -120,6 +147,7 @@ export default function WidgetGridAdmin({ widgets, supabase, slug, isAdmin, user
                     type: type,
                 },
             };
+            saveFullGrid();
             setWidgetArray([...widgetArray, newItem]);
         }
     }
@@ -129,6 +157,7 @@ export default function WidgetGridAdmin({ widgets, supabase, slug, isAdmin, user
         let newArr = widgetArray.filter((item: any) => item.id !== id)
         setWidgetArray([...newArr]);
         grid.removeWidget(refs.current[id].current, false);
+        saveFullGrid()
     }
 
     async function copyToClip() {
@@ -191,7 +220,7 @@ export default function WidgetGridAdmin({ widgets, supabase, slug, isAdmin, user
                             </div>
                         </div>
                     ) : null}
-                    <ComponentLoader component={item} hex={hex} supabase={supabase} isAdmin={isAdmin} userId={userId} saveFullGrid={saveFullGrid} />
+                    <ComponentLoader component={item} hex={hex} supabase={supabase} isAdmin={isAdmin} userId={userId} setWidgetArray={setWidgetArray} widgetArray={widgetArray} saveFullGrid={saveFullGrid} />
                 </div>
                 {/* Paragraph Widget Formatting */}
                 {item.component_data.type === 'Paragraph' ? (

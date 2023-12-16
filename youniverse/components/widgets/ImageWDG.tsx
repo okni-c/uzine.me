@@ -1,8 +1,8 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import toast, { Toaster } from 'react-hot-toast';
 import { v4 as uuidv4 } from 'uuid';
 
-export default function ImageWDG({ src, userId, caption, supabase, isAdmin, saveFullGrid }: any) {
+export default function ImageWDG({ src, userId, caption, supabase, isAdmin, saveFullGrid, setWidgetArray, widgetArray, id }: any) {
 
     const [newPicture, setNewPicture] = useState<any>(src || '/mountains_placeholder.png')
     const prevNewPictureRef = useRef<any>(newPicture);
@@ -72,37 +72,59 @@ export default function ImageWDG({ src, userId, caption, supabase, isAdmin, save
         if (data) {
             console.log(data)
             setNewPicture(data.publicUrl)
-            saveFullGrid()
-        } else {
-            console.error(error)
+            // Find the widget with the given id
+            let thisWidgetIndex = widgetArray.findIndex((widget: any) => widget.id === id);
+
+            if (thisWidgetIndex !== -1) {
+                // Create a new object to avoid modifying the existing one
+                let updatedWidget = { ...widgetArray[thisWidgetIndex] };
+
+                // Check if the 'component_data' property exists
+                if (!updatedWidget.component_data) {
+                    // If it doesn't exist, create it
+                    updatedWidget.component_data = {};
+                }
+
+                // Check if the 'props' property exists
+                if (!updatedWidget.component_data.props) {
+                    // If it doesn't exist, create it
+                    updatedWidget.component_data.props = {};
+                }
+
+                // Update the 'src' property
+                updatedWidget.component_data.props.src = data.publicUrl;
+
+                // Create a new array with the updated widget
+                let updatedWidgetArray = [...widgetArray];
+                updatedWidgetArray[thisWidgetIndex] = updatedWidget;
+
+                console.log(updatedWidgetArray);
+
+                // Update state with the new array
+                setWidgetArray(updatedWidgetArray);
+                setTimeout(() => saveFullGrid(), 500);
+
+            } else {
+                console.error("Widget with ID not found");
+            }
         }
     }
-
-    // const postNewPicture = async (avatarSrc: string) => {
-    //     const { error } = await supabase
-    //         .from('user_sites')
-    //         .update({ avatar_src: avatarSrc })
-    //         .eq('id', userId)
-    //     if (error) {
-    //         console.error(error)
-    //     }
-    // }
 
     return (
         <>
             {!isAdmin ? (
                 <div className='w-full h-full flex flex-col relative rounded-2xl'>
                     <img src={src ? src : '/mountains_placeholder.png'} className='h-full w-full object-cover rounded-2xl pointer-events-none select-none border border-[rgba(12, 12, 12, 0.19)]' />
-                    <p className='bg-white py-1 px-2 rounded-md absolute bottom-4 left-4 text-sm font-semibold drop-shadow-md border border-neutral-300 group'>Caption text goes here</p>
+                    <p className='bg-white py-1 px-2 rounded-md absolute bottom-4 left-4 text-sm font-semibold drop-shadow-md border border-neutral-300 group'>Caption text</p>
                 </div>
             ) : (
                 <>
                     <Toaster />
                     <div className='w-full h-full flex flex-col relative rounded-2xl'>
-                    <input ref={uploadRef} onChange={handleFileUpload} type="file" accept="image/*" size={1048576} className="hidden m-0 p-0 h-0 w-0" />
+                        <input ref={uploadRef} onChange={handleFileUpload} type="file" accept="image/*" size={1048576} className="hidden m-0 p-0 h-0 w-0" />
                         <button className='group-hover:opacity-100 opacity-0 w-[30px] h-[30px] self-center rounded-lg absolute bottom-0 right-[-10px] z-[99999] flex items-center justify-center bg-[#FFFFFF] border border-[#4545453b] hover:bg-[#d9d9d9] delete-btn-hover transition-all duration-100 ease-linear' onClick={() => clickInput()}><img src='/upload-button.svg' className='h-[15px] opacity-0 group-hover:opacity-100' /></button>
                         <img src={newPicture} className='h-full w-full object-cover rounded-2xl pointer-events-none select-none border border-[rgba(12, 12, 12, 0.19)]' />
-                        <p className='bg-white py-1 px-2 rounded-md absolute bottom-4 left-4 text-sm font-semibold drop-shadow-md border border-neutral-300 group'>Caption text goes here</p>
+                        <p className='bg-white py-1 px-2 rounded-md absolute bottom-4 left-4 text-sm font-semibold drop-shadow-md border border-neutral-300 group text-ellipsis'>Caption text!</p>
                     </div>
                 </>
             )}
