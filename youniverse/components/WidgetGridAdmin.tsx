@@ -117,7 +117,7 @@ export default function WidgetGridAdmin({ widgets, supabase, slug, isAdmin, user
                     type: type,
                     bg_color: '#fc4903',
                     props: {
-                        text: 'Welcome, add some new widgets!'
+                        text: 'Type something!'
                     }
                 },
             };
