@@ -57,33 +57,9 @@ export default function WidgetGridAdmin({ widgets, supabase, slug, isAdmin, user
             .from('user_sites')
             .update({ widget_data: serializedFull.children })
             .eq('slug', slug)
-        
+
         return console.log(error)
     }
-
-    // function startTimer() {
-    //     let timer: NodeJS.Timeout | null = null;
-    
-    //     function saveAndLog() {
-    //         console.log('Saved!');
-    //         // Add your save logic here
-    //         saveFullGrid();
-    //     }
-    
-    //     function setTimer() {
-    //         // Clear the existing timer if it's running
-    //         if (timer) {
-    //             clearTimeout(timer);
-    //         }
-    
-    //         // Set a new timer
-    //         timer = setTimeout(saveAndLog, 3000); // 3000 milliseconds = 3 seconds
-    //     }
-    
-    //     return setTimer;
-    // }
-
-    // const setSaveTimer = startTimer();
 
     function addEvents(grid: any) {
         grid.on('resizestop', function () {
@@ -136,6 +112,19 @@ export default function WidgetGridAdmin({ widgets, supabase, slug, isAdmin, user
             };
             saveFullGrid();
             setWidgetArray([...widgetArray, newItem]);
+        } else if (type == 'Section') {
+            const newItem = {
+                id: Math.random(),
+                "w": 4,
+                "h": 1,
+                'maxH': 1,
+                'maxW': 4,
+                component_data: {
+                    type: type,
+                },
+            };
+            saveFullGrid();
+            setWidgetArray([...widgetArray, newItem]);
         } else {
             const newItem = {
                 id: Math.random(),
@@ -166,13 +155,13 @@ export default function WidgetGridAdmin({ widgets, supabase, slug, isAdmin, user
         toast('Copied to clipboard!', {
             duration: 2000,
             position: 'top-center',
-          
+
             // Styling
             className: 'border border-[rgba(12,12,12,0.19)]',
-          
+
             // Custom Icon
             icon: '📋',
-          });
+        });
     }
 
     const Widget = ({ item, supabase }: any) => {
@@ -263,11 +252,11 @@ export default function WidgetGridAdmin({ widgets, supabase, slug, isAdmin, user
 
     return (
         <>
-        <Toaster />
+            <Toaster />
             <div className='flex flex-row gap-3 my-1 rounded-xl border border-[rgba(12, 12, 12, 0.50)] bg-[rgba(0, 0, 0, 0.12)] p-2 w-min items-center shadow-sm ml-[10px]'>
                 <button className='bg-green-400 rounded-lg text-sm px-4 py-1 h-[32px] text-white font-semibold' onClick={() => copyToClip()}>Share</button>
                 <div className='h-[20px] w-[2px] bg-neutral-200 rounded-full'></div>
-                <button disabled={true} className='edit-tray-btn'><img src='/link-button.svg' className='h-[15px]' /></button>
+                <button className='edit-tray-btn' onClick={() => addWidget('SocialLink')}><img src='/link-button.svg' className='h-[15px]' /></button>
                 <button className='edit-tray-btn' onClick={() => addWidget('Image')}><img src='/img-button.svg' className='h-[15px]' /></button>
                 <button className='edit-tray-btn' onClick={() => addWidget('Paragraph')}><img src='/text-button.svg' className='h-[15px]' /></button>
                 <button disabled={true} className='edit-tray-btn'><img src='/map-button.svg' className='h-[15px]' /></button>

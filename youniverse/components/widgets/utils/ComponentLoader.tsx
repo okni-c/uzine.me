@@ -1,12 +1,16 @@
 import ParagraphWDG from "../ParagraphWDG";
 import ImageWDG from "../ImageWDG";
 import GitHubWDG from "../GitHubWDG";
+import SocialLinkWDG from "../SocialLinkWDG";
+import SectionWDG from "../SectionWDG";
 
 export default function ComponentLoader ({ component, hex, supabase, isAdmin, userId, saveFullGrid, setWidgetArray, widgetArray }: any) {
     const componentMappings: any = {
         Paragraph: ParagraphWDG,
         Image: ImageWDG,
         GitHub: GitHubWDG,
+        SocialLink: SocialLinkWDG,
+        Section: SectionWDG,
         // Add other mappings as needed
     };
 
