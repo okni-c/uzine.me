@@ -16,9 +16,8 @@ export default function WidgetGridAdmin({ widgets, supabase, slug, isAdmin, user
     useEffect(() => {
         // Initialize GridStack when the component mounts
         gridRef.current = GridStack.init({
-            // Need to figure out how to make this column 2 on mobile only
-            column: 4,
-            maxRow: 6,
+            column: 8,
+            maxRow: 30,
             resizable: {
                 handles: 'n,s,e,w'
             },
@@ -85,10 +84,12 @@ export default function WidgetGridAdmin({ widgets, supabase, slug, isAdmin, user
         if (type == 'Paragraph') {
             const newItem = {
                 id: Math.random(),
-                "w": 1,
-                "h": 1,
-                'maxH': 2,
-                'maxW': 2,
+                "w": 2,
+                "h": 2,
+                'maxH': 4,
+                'maxW': 4,
+                'minH': 2,
+                'minW': 2,
                 component_data: {
                     type: type,
                     bg_color: '#fc4903',
@@ -102,10 +103,12 @@ export default function WidgetGridAdmin({ widgets, supabase, slug, isAdmin, user
         } else if (type == 'GitHub') {
             const newItem = {
                 id: Math.random(),
-                "w": 1,
-                "h": 1,
-                'maxH': 2,
-                'maxW': 2,
+                "w": 2,
+                "h": 2,
+                'maxH': 4,
+                'maxW': 4,
+                'minH': 2,
+                'minW': 2,
                 component_data: {
                     type: type,
                 },
@@ -115,10 +118,11 @@ export default function WidgetGridAdmin({ widgets, supabase, slug, isAdmin, user
         } else if (type == 'Section') {
             const newItem = {
                 id: Math.random(),
-                "w": 4,
+                "w": 8,
                 "h": 1,
                 'maxH': 1,
-                'maxW': 4,
+                'minW': 8,
+                'noResize': true,
                 component_data: {
                     type: type,
                 },
@@ -128,10 +132,12 @@ export default function WidgetGridAdmin({ widgets, supabase, slug, isAdmin, user
         } else {
             const newItem = {
                 id: Math.random(),
-                "w": 1,
-                "h": 1,
-                'maxH': 2,
-                'maxW': 2,
+                "w": 2,
+                "h": 2,
+                'maxH': 4,
+                'maxW': 4,
+                'minH': 2,
+                'minW': 2,
                 component_data: {
                     type: type,
                 },
@@ -198,7 +204,7 @@ export default function WidgetGridAdmin({ widgets, supabase, slug, isAdmin, user
                 <button onClick={() => setDeleteDialog(true)} className='group-hover:opacity-100 opacity-0 w-[30px] h-[30px] self-center rounded-full absolute top-0 right-1 z-[99999] flex items-center justify-center bg-[#454545] hover:bg-[#d9d9d9] delete-btn-hover transition-colors duration-100 ease-linear'>
                     <svg className='h-[14px] w-[12px] fill-[#D9D9D9] transition-colors duration-100 ease-linear' height="14" viewBox="0 0 12 14" width="12" xmlns="http://www.w3.org/2000/svg"><path d="m11.5714.875004h-3.21426l-.25178-.511327c-.05334-.109317-.1355-.201272-.23724-.2655195-.10174-.064248-.21902-.0982403-.33866-.09815271h-3.0616c-.11937-.00046841-.23644.03339711-.33782.09771661-.10138.0643196-.18296.1564916-.2354.2659556l-.25178.511327h-3.214289c-.113664 0-.222673.046094-.303045.128146-.0803731.08204-.125526.19332-.125526.30935v.875c0 .11604.0451529.22732.125526.30936.080372.08205.189381.12814.303045.12814h11.142829c.1137 0 .2227-.04609.3031-.12814.0803-.08204.1255-.19332.1255-.30936v-.875c0-.11603-.0452-.22731-.1255-.30935-.0804-.082052-.1894-.128146-.3031-.128146zm-10.1464 11.894496c.02044.3332.16451.646.40287.8746.23837.2286.55311.3559.88017.3559h6.58392c.32706 0 .6418-.1273.88014-.3559.2384-.2286.3825-.5414.4029-.8746l.5679-9.2695h-10.285757z" /></svg>
                 </button>
-                <div className="grid-stack-item-content shadow-md !overflow-y-hidden">
+                <div className={`grid-stack-item-content !overflow-y-hidden ${item.component_data.type !== 'Section' ? 'shadow-md' : null}`}>
                     {/* Deletion confirmation dialog */}
                     {deleteDialog ? (
                         <div className='h-full w-full bg-[#454545] flex flex-col gap-3 justify-center items-center rounded-3xl'>
@@ -253,14 +259,17 @@ export default function WidgetGridAdmin({ widgets, supabase, slug, isAdmin, user
     return (
         <>
             <Toaster />
+
+            {/* Admin edit tray */}
             <div className='flex flex-row gap-3 my-1 rounded-xl border border-[rgba(12, 12, 12, 0.50)] bg-[rgba(0, 0, 0, 0.12)] p-2 w-min items-center shadow-sm ml-[10px]'>
                 <button className='bg-green-400 rounded-lg text-sm px-4 py-1 h-[32px] text-white font-semibold' onClick={() => copyToClip()}>Share</button>
                 <div className='h-[20px] w-[2px] bg-neutral-200 rounded-full'></div>
                 <button className='edit-tray-btn' onClick={() => addWidget('SocialLink')}><img src='/link-button.svg' className='h-[15px]' /></button>
                 <button className='edit-tray-btn' onClick={() => addWidget('Image')}><img src='/img-button.svg' className='h-[15px]' /></button>
                 <button className='edit-tray-btn' onClick={() => addWidget('Paragraph')}><img src='/text-button.svg' className='h-[15px]' /></button>
+                <button className='edit-tray-btn' onClick={() => addWidget('Section')}><img src='/section-button.svg' className='h-[15px]' /></button>
                 <button disabled={true} className='edit-tray-btn'><img src='/map-button.svg' className='h-[15px]' /></button>
-                <button className='edit-tray-btn' onClick={() => addWidget('GitHub')}><img src='/github-button.svg' className='h-[20px]' /></button>
+                {/* <button className='edit-tray-btn' onClick={() => addWidget('GitHub')}><img src='/github-button.svg' className='h-[20px]' /></button> */}
             </div>
 
             <div className="grid-stack">

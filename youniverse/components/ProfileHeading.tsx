@@ -134,7 +134,7 @@ export default function ProfileHeading({ isAdmin, user_data, supabase }: any) {
                 <>
                     <Image src={newPicture} alt={'Profile Picture'} height={184} width={184} className='rounded-full max-w-[184px] max-h-[184px] xl:h-full xl:w-full h-[100px] w-[100px] aspect-square object-cover' />
                     <h2 className='text-[36px] md:text-[44px] font-bold tracking-tighter'>{user_data.display_name}</h2>
-                    <p className='text-[20px] text-[#454545]'>{user_data.description}<br />I do cool stuff with React.</p>
+                    <p className='text-[20px] text-[#454545]'>{user_data.description}</p>
                 </>
             ) : (
                 <>

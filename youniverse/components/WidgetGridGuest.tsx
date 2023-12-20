@@ -14,8 +14,8 @@ export default function WidgetGridGuest({ widgets, isAuth }: any) {
     useEffect(() => {
         // Initialize GridStack when the component mounts
         gridRef.current = GridStack.init({
-            column: 4,
-            maxRow: 6,
+            column: 8,
+            maxRow: 30,
             resizable: {
                 handles: 'n,s,e,w'
             },

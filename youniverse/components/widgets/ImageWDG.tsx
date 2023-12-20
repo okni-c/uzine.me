@@ -167,7 +167,7 @@ export default function ImageWDG({ src, userId, caption, supabase, isAdmin, save
                         <input ref={uploadRef} onChange={handleFileUpload} type="file" accept="image/*" size={1048576} className="hidden m-0 p-0 h-0 w-0" />
                         <button className='group-hover:opacity-100 opacity-0 w-[30px] h-[30px] self-center rounded-lg absolute top-[10px] left-[10px] z-[99999] flex items-center justify-center bg-[#FFFFFF] border border-[#4545453b] hover:bg-[#d9d9d9] delete-btn-hover transition-all duration-100 ease-linear' onClick={() => clickInput()}><img src='/upload-button.svg' className='h-[15px] opacity-0 group-hover:opacity-100' /></button>
                         <img src={newPicture} className='h-full w-full object-cover rounded-2xl pointer-events-none select-none border border-[rgba(12, 12, 12, 0.19)]' />
-                        <input onChange={handleCaptionChange} onBlur={handleBlur} className={`bg-white py-1 px-2 rounded-md mt-[-45px] mx-[15px] w-auto max-w-[300px] text-ellipsis text-sm font-semibold drop-shadow-md border border-neutral-300 group hover:border-neutral-500 ${captionState === '' ? `opacity-0 group-hover:opacity-100` : null}`} value={captionState} placeholder="Type something!" />
+                        <input onChange={handleCaptionChange} onBlur={handleBlur} className={`bg-white py-1 px-2 rounded-md mt-[-45px] mx-[15px] w-auto max-w-[300px] text-ellipsis text-sm font-semibold drop-shadow-md border border-neutral-300 group hover:border-neutral-500 focus-visible:!opacity-100 transition-opacity duration-100 ease-linear ${captionState === '' ? `opacity-0 group-hover:opacity-75` : null}`} value={captionState} placeholder="Type something!" />
                     </div>
                 </>
             )}
