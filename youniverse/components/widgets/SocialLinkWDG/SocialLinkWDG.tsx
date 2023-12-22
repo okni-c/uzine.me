@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-import { SLSteam, SLInstagram, SLFacebook, SLSpotify, SLTwitter, SLYoutube, SLLinkedin, SLDefault, SLGithub, SLDiscord } from './Brands';
+import { SLSteam, SLInstagram, SLFacebook, SLSpotify, SLTwitter, SLYoutube, SLLinkedin, SLGithub, SLDiscord, SLHasFavicon } from './Brands';
 
 export default function SocialLinkWDG({ id, url, handle, brand_name, widgetArray, setWidgetArray, saveFullGrid, isAdmin }: any) {
 
@@ -40,9 +40,10 @@ export default function SocialLinkWDG({ id, url, handle, brand_name, widgetArray
         }
     }
 
-    const handleKeyDown = async (event: any) => {
+    const handleKeyDown = async (event: React.KeyboardEvent<HTMLInputElement>) => {
         // Check if the pressed key is Enter (key code 13)
         if (event.key === 'Enter') {
+            event.preventDefault();
             if (URLState.length > 0) {
                 try {
                     const urlObject = new URL(URLState);
@@ -73,6 +74,10 @@ export default function SocialLinkWDG({ id, url, handle, brand_name, widgetArray
                             setGeneratedBrand('Youtube');
                             saveNewSL('Youtube', URLState)
                             break;
+                        case 'discord.com':
+                            setGeneratedBrand('Discord');
+                            saveNewSL('Discord', URLState)
+                            break;
                         default:
                             setGeneratedBrand('Default');
                             saveNewSL('Default', URLState)
@@ -92,6 +97,23 @@ export default function SocialLinkWDG({ id, url, handle, brand_name, widgetArray
         setURLState(e.currentTarget.value)
     }
 
+    const MakeSL = () => {
+        return (
+            <div className='w-full h-full p-4 flex flex-col justify-center gap-3'>
+                <p className='font-bold'>MagiLink<sup>™️</sup></p>
+                <input
+                    type='text'
+                    onChange={handleURLChange}
+                    onKeyDown={handleKeyDown}
+                    value={URLState}
+                    className='bg-white w-full border border-neutral-200 rounded-md px-1 py-1 text-sm'
+                    placeholder='Paste your link...'
+                />
+                <pre>{generatedBrand}</pre>
+            </div>
+        )
+    }
+
     const BrandLoader = () => {
 
         const componentMappings: any = {
@@ -104,40 +126,38 @@ export default function SocialLinkWDG({ id, url, handle, brand_name, widgetArray
             Linkedin: SLLinkedin,
             Github: SLGithub,
             Discord: SLDiscord,
-            Default: SLDefault
+            Default: SLHasFavicon
         };
 
-        const ComponentType = componentMappings[generatedBrand];
+        let ComponentType = componentMappings[generatedBrand];
+
+        if (!ComponentType) {
+            return <MakeSL />;
+        }
 
         const componentProps = { handle, url: URLState };
         return <ComponentType {...componentProps} />;
     }
 
 
-    if (isAdmin) {
-        if (generatedBrand && URLState) {
-            return <BrandLoader />;
-        }
-
-        if (!generatedBrand) {
-            return (
-                <div className='w-full h-full p-4 flex flex-col justify-center gap-3'>
-                    <p className='font-bold'>MagiLink<sup>™️</sup></p>
-                    <input
-                        type='text'
-                        onChange={handleURLChange}
-                        onKeyDown={handleKeyDown}
-                        value={URLState}
-                        className='bg-white w-full border border-neutral-200 rounded-md px-1 py-1 text-sm'
-                        placeholder='Paste your link...'
-                    />
-                    <pre>{generatedBrand}</pre>
-                </div>
-            )
-        }
-    }
-    if (!isAdmin) {
+    if (generatedBrand !== '') {
         return <BrandLoader />;
     }
+
+
+    return (
+        <div className='w-full h-full p-4 flex flex-col justify-center gap-3'>
+            <p className='font-bold'>MagiLink<sup>™️</sup></p>
+            <input
+                type='text'
+                onChange={handleURLChange}
+                onKeyDown={handleKeyDown}
+                value={URLState}
+                className='bg-white w-full border border-neutral-200 rounded-md px-1 py-1 text-sm'
+                placeholder='Paste your link...'
+            />
+            <pre>{generatedBrand}</pre>
+        </div>
+    )
 
 };

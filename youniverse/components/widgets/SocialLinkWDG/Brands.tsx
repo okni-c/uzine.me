@@ -55,10 +55,11 @@ const SLTwitter = ({ handle, url }: any) => {
 };
 
 // Facebook component
-const SLFacebook = ({ handle, url }: any) => {
+const SLFacebook = ({ handle, url, isAdmin }: any) => {
     return (
         <div className='w-full h-full p-4 bg-white rounded-2xl flex flex-col gap-3 justify-between border border-[rgba(8,102,255,0.4)] shadow-inset-widget'>
             <FontAwesomeIcon icon={faFacebook} size="2x" className="mb-2 w-[40px] h-[40px] text-[#0866FF]" />
+            
             <p className="text-lg font-extrabold tracking-tighter flex-grow text-[#0866FF]">{handle}</p>
             <a href={url} target="_blank" rel="noopener noreferrer" className="text-lg font-semibold tracking-tighter text-white bg-[#0866FF] px-1 h-[33px] max-w-[100px] flex flex-row justify-center items-center rounded-lg">
                 Add Friend
@@ -144,21 +145,34 @@ const SLDefault = ({ handle, url }: any) => {
 
 // Favicon based component
 const SLHasFavicon = ({ handle, url, favicon }: any) => {
-    // const [hasFavicon, setHasFavicon] = useState<boolean | null>(null);
+    const [hasFavicon, setHasFavicon] = useState<boolean | null>(null);
 
-    // useEffect(() => {
-    //     const checkFavicon = async () => {
-    //         try {
-    //             const response = await fetch(`${url}/favicon.ico`);
-    //             setHasFavicon(response.ok);
-    //         } catch (error) {
-    //             console.error('Error checking favicon:', error);
-    //             setHasFavicon(false);
-    //         }
-    //     };
+    useEffect(() => {
+        const checkFavicon = async () => {
+          try {
+            // Set up headers to enable CORS
+            const headers = new Headers();
+            headers.append('Origin', 'http://localhost'); // Adjust the origin as needed
+      
+            const response = await fetch(`${url}/favicon.ico`, {
+              method: 'GET',
+              mode: 'cors',
+              headers: headers,
+            });
+      
+            setHasFavicon(response.ok);
+          } catch (error) {
+            console.error('Error checking favicon:', error);
+            setHasFavicon(false);
+          }
+        };
+      
+        checkFavicon();
+      }, [url]);
 
-    //     checkFavicon();
-    // }, [url]);
+    if (!hasFavicon) {
+        return <SLDefault />
+    }
 
     return (
         <div className='w-full h-full p-4 bg-white rounded-2xl flex flex-col gap-3 justify-between border border-[rgba(12,12,12,0.1)] shadow-inset-widget'>
