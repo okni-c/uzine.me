@@ -1,7 +1,8 @@
-import { useState } from "react";
+import { useState } from "react"
 
-export default function ParagraphWDG({ text, id, hex, isAdmin, widgetArray, setWidgetArray, saveFullGrid }: any) {
-    const [textState, setTextState] = useState<string>(text || 'Default Props');
+export default function SectionWDG({ widgetArray, id, isAdmin, setWidgetArray, saveFullGrid, section_text }: any) {
+
+    const [textState, setTextState] = useState<string>(section_text || '');
 
     const handleChange = (e: any) => {
         e.preventDefault();
@@ -25,7 +26,7 @@ export default function ParagraphWDG({ text, id, hex, isAdmin, widgetArray, setW
             }
 
             // Update the 'text' property
-            updatedWidget.component_data.props.text = newText;
+            updatedWidget.component_data.props.section_text = newText;
 
             // Create a new array with the updated widget
             let updatedWidgetArray = [...widgetArray];
@@ -48,16 +49,15 @@ export default function ParagraphWDG({ text, id, hex, isAdmin, widgetArray, setW
 
     return (
         <>
-            {/* Are we the Author? */}
-            {isAdmin ? (
-                <div className='w-full h-full flex flex-col relative grid-stack-border hover:cursor-move' style={{ backgroundColor: hex }}>
-                    <textarea className='hover:bg-[rgba(12,12,12,0.09)] bg-transparent font-bold text-xl break-words overscroll-x-none w-full h-full resize-none p-1 focus-visible:outline-neutral-400 rounded-lg !overflow-y-auto text-center' onChange={handleChange} onBlur={handleBlur} value={textState} />
+            {!isAdmin ? (
+                <div className="w-full h-full flex justify-start items-center bg-white px-2">
+                    <h3 className="font-extrabold tracking-tighter text-2xl">Section Title</h3>
                 </div>
-            ) :
-                <div className='w-full h-full flex flex-col relative grid-stack-border !border-[rgba(12, 12, 12, 0.19)]' style={{ backgroundColor: hex }}>
-                    <p className='bg-transparent font-bold text-xl break-words overscroll-x-none w-full h-full resize-none p-1 focus-visible:outline-neutral-400 rounded-lg !overflow-y-auto'>{textState}</p>
+            ) : (
+                <div className="w-full h-full flex justify-start items-center bg-white hover:bg-neutral-100 transition-colors duration-100 ease-linear cursor-move px-2">
+                    <input onChange={handleChange} onBlur={handleBlur} value={textState} placeholder="New title" className="font-extrabold tracking-tighter text-2xl cursor-text rounded-md bg-transparent hover:bg-white focus-visible:outline-transparent focus-visible:bg-white" />
                 </div>
-            }
+            )}
         </>
-    );
+    )
 }

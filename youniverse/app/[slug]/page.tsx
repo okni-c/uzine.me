@@ -6,6 +6,7 @@ import { useState } from 'react';
 import WidgetGridAdmin from '@/components/WidgetGridAdmin';
 import WidgetGridGuest from '@/components/WidgetGridGuest';
 import AuthButton from '@/components/AuthButton';
+import ProfileHeading from '@/components/ProfileHeading';
 
 export default function Page() {
     const supabase = createClient()
@@ -38,10 +39,6 @@ export default function Page() {
     }, [params.slug])
 
     useEffect(() => {
-        // if (isAuth.session.user.email === stores.email) {
-
-        // }
-
         if (isAuth && stores) {
             if (isAuth.user.id == stores.id) {
                 return setIsUser(true)
@@ -54,17 +51,16 @@ export default function Page() {
 
     return (
         <>
-            <div className='flex md:flex-row w-full justify-between p-5 flex-col max-w-7xl'>
+            <div className='flex w-full justify-between flex-row max-w-[1400px] p-14'>
                 {stores ? (
-                    <div className='w-full flex flex-col gap-5'>
-                        {isUser ? <p className='text-green-500 font-bold text-2xl mb-24'>This is your account.</p> : <p className='text-red-500 font-bold text-2xl mb-24'>This is not your account.</p>}
-                        <div className='flex flex-col gap-3 my-5'>
-                            <h2 className='text-5xl font-black tracking-tighter'>{stores.display_name}</h2>
-                            <p className='text-2xl'>{stores.description}</p>
+                    <div className='w-full flex xl:flex-row flex-col gap-10 justify-between relative animate-in'>
+                        {isUser ? <p className='text-green-500 font-bold text-xs absolute top-0 left-0'>This is your account.</p> : <p className='text-red-500 font-bold text-xs absolute'>This is not your account.</p>}
+                        <div className='flex flex-col justify-center items-center xl:items-start xl:justify-start gap-3 my-5'>
+                            <ProfileHeading isAdmin={isUser} user_data={stores} supabase={supabase} />
                         </div>
-                        {/* <pre>Session Cookie: {JSON.stringify(isAuth, null, 6)}</pre>
-                        <pre>Stores: {JSON.stringify(stores, null, 6)}</pre> */}
-                        {isUser ? <WidgetGridAdmin widgets={stores.widget_data} supabase={supabase} slug={params.slug} /> : <WidgetGridGuest widgets={stores.widget_data} isAuth={isAuth} />}
+                        <div className='max-w-[820px] w-full mx-auto'>
+                            {isUser ? <WidgetGridAdmin widgets={stores.widget_data} supabase={supabase} slug={params.slug} isAdmin={isUser} userId={isAuth.user.id} /> : <WidgetGridGuest widgets={stores.widget_data} isUser={isUser} />}
+                        </div>
                     </div>
                 ) : null}
             </div>

@@ -14,7 +14,8 @@ export default function WidgetGridGuest({ widgets, isAuth }: any) {
     useEffect(() => {
         // Initialize GridStack when the component mounts
         gridRef.current = GridStack.init({
-            column: 4,
+            column: 8,
+            maxRow: 30,
             resizable: {
                 handles: 'n,s,e,w'
             },
@@ -28,6 +29,8 @@ export default function WidgetGridGuest({ widgets, isAuth }: any) {
     }, []);
 
     if (Object.keys(refs.current).length !== widgetArray.length) {
+        //console.log('Running the if');
+
         // Clear existing refs
         refs.current = [];
 
@@ -57,22 +60,22 @@ export default function WidgetGridGuest({ widgets, isAuth }: any) {
 
     return (
         <>
-                <div className="grid-stack max-w-[600px]">
-                    {widgetArray.map((item: any) => {
-                        return (
-                            <div
-                                ref={refs.current[item.id]}
-                                key={item.id}
-                                className={'grid-stack-item relative group'}
-                                gs-no-resize="true"
-                                gs-no-move="true"
-                                
-                            >
-                                <Widget item={item} />
-                            </div>
-                        )
-                    })}
-                </div>
+            <div className="grid-stack">
+                {widgetArray.map((item: any) => {
+                    return (
+                        <div
+                            ref={refs.current[item.id]}
+                            key={item.id}
+                            className={'grid-stack-item relative group'}
+                            gs-no-resize="true"
+                            gs-no-move="true"
+
+                        >
+                            <Widget item={item} />
+                        </div>
+                    )
+                })}
+            </div>
         </>
     )
 }
