@@ -5,7 +5,6 @@ export default function SignUpForm({ potentialSlug, supabase }: any) {
 
         let email = formData.get('email') as string
         let password = formData.get('password') as string
-        const origin = window.location.origin
 
         console.log(email, password)
 
@@ -14,7 +13,7 @@ export default function SignUpForm({ potentialSlug, supabase }: any) {
                 email: email,
                 password: password,
                 options: {
-                    emailRedirectTo: `${origin}/auth/callback?slug=${potentialSlug}`,
+                    emailRedirectTo: `https://uzine.me/auth/callback?slug=${potentialSlug}`,
                   },
             }
         )
