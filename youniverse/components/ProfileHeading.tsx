@@ -5,7 +5,7 @@ import toast, { Toaster } from 'react-hot-toast'
 import Textarea from 'react-expanding-textarea'
 
 export default function ProfileHeading({ isAdmin, user_data, supabase }: any) {
-    const [newPicture, setNewPicture] = useState<any>(user_data.avatar_src || '/profile_picture.webp');
+    const [newPicture, setNewPicture] = useState<any>(user_data.avatar_src || '/no-picture.jpg');
     const [displayNameState, setDisplayNameState] = useState<string>(user_data.display_name || 'Type your name.');
     const [descState, setDescState] = useState<string>(user_data.description || 'Type your description.');
 
