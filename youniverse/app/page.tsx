@@ -50,6 +50,7 @@ const AnimatedNameList = ({ names }: any) => {
 const NameList = () => {
     const names = [
         'Dallas',
+        'Maxwell',
         'Reed',
         'Marc',
         'Sariah',
@@ -172,6 +173,7 @@ export default function Page() {
                 <NameList />
             </motion.div>
             <motion.div
+            className="flex flex-col justify-center items-center gap-5"
             initial={{ opacity: 0, y: -50 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 4, delay: 1, type: "spring" }}>
