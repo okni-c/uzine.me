@@ -1,10 +1,36 @@
+'use client'
 import toast, { Toaster } from "react-hot-toast"
+import { useEffect, useState } from "react";
 
 export default function SignUpForm({ potentialSlug, supabase }: any) {
+
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [isValid, setIsValid] = useState<boolean>(false);
+
+    const handleChangeEmail = (e: any) => {
+        setEmail(e.target.value);
+    };
+
+    const handleChangePassword = (e: any) => {
+        setPassword(e.target.value);
+    };
+
+    useEffect(() => {
+        if (email !== '' && password !== '' && password.length >= 6) {
+            setIsValid(true)
+        } else {
+            setIsValid(false)
+        }
+    },[email, password])
+
+
+
     const signUp = async (formData: FormData) => {
 
         let email = formData.get('email') as string
         let password = formData.get('password') as string
+        let origin = window.location.origin
 
         console.log(email, password)
 
@@ -13,15 +39,16 @@ export default function SignUpForm({ potentialSlug, supabase }: any) {
                 email: email,
                 password: password,
                 options: {
-                    emailRedirectTo: `https://uzine.me/auth/callback?slug=${potentialSlug}`,
-                  },
+                    emailRedirectTo: `${origin}/auth/callback?slug=${potentialSlug}`,
+                },
             }
         )
+        console.log(`${origin}/auth/callback?slug=${potentialSlug}`)
 
         if (error) {
             return toast.error('There was an error: ' + error)
         }
-        addSlug(email)
+        await addSlug(email)
         return toast.success('Please check your email to finish setup.')
     }
 
@@ -50,43 +77,51 @@ export default function SignUpForm({ potentialSlug, supabase }: any) {
         const { error } = await supabase
             .from('user_sites')
             .update({ slug: slug, widget_data: [newItem] })
-            .eq('email', email )
+            .eq('email', email)
 
         if (error) {
             return toast.error('There was an error with adding your slug: ' + error)
         }
-
-        return toast.success('Your slug has been added.')
     }
 
     return (
         <>
             <Toaster />
-            <p className="font-mono">Reserving uzine.me/{potentialSlug}</p>
+            <p className="tracking-tight text-xl mb-12">Reserving <span className="font-bold">uzine.me/{potentialSlug}</span></p>
             <form
-                className="animate-in flex-1 flex flex-col w-full justify-center gap-2 text-foreground"
+                className="animate-in flex-1 flex flex-col w-full justify-center gap-5 text-foreground"
                 action={signUp}
             >
-                <label className="text-md" htmlFor="email">
-                    Email
-                </label>
-                <input
-                    className="rounded-md px-4 py-2 bg-inherit border mb-6"
-                    name="email"
-                    placeholder="you@example.com"
-                    required
-                />
-                <label className="text-md" htmlFor="password">
-                    Password
-                </label>
-                <input
-                    className="rounded-md px-4 py-2 bg-inherit border mb-6"
-                    type="password"
-                    name="password"
-                    placeholder="••••••••"
-                    required
-                />
-                <button className="bg-green-700 rounded-md px-4 py-2 text-white mb-2">
+                <div className="flex flex-col">
+                    <label className="text-md" htmlFor="email">
+                        Email
+                    </label>
+                    <input
+                        className='bg-neutral-100 p-3 rounded-lg invalid:outline-red-500'
+                        name="email"
+                        placeholder="you@example.com"
+                        type="email"
+                        onChange={handleChangeEmail}
+                        required
+                    />
+                </div>
+
+                <div className="flex flex-col">
+                    <label className="text-md" htmlFor="password">
+                        Password <span className="text-xs text-neutral-500">(must be 6 characters)</span>
+                    </label>
+                    <input
+                        className='bg-neutral-100 p-3 rounded-lg invalid:outline-red-500'
+                        type="password"
+                        minLength={6}
+                        name="password"
+                        placeholder="••••••••"
+                        onChange={handleChangePassword}
+                        required
+                    />
+                </div>
+
+                <button className="border rounded-xl shadow-inset-home-btn border-[rgba(12,12,12,0.19)] flex justify-center items-center py-3 px-4 enabled:hover:scale-105 enabled:hover:text-black text-neutral-500 duration-150 ease-linear group disabled:cursor-not-allowed disabled:opacity-50" disabled={!isValid}>
                     Sign up
                 </button>
             </form>

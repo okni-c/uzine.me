@@ -71,7 +71,7 @@ export default function Page() {
                 </>
             ) : (
                 <>
-                    <div className="flex flex-col gap-10">
+                    <div className="flex flex-col gap-12 w-full max-w-[350px]">
                         <div>
                             <SignUpForm potentialSlug={potentialSlug} supabase={supabase} />
                         </div>
