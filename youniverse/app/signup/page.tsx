@@ -3,9 +3,12 @@
 import { createClient } from "@/utils/supabase/client"
 import { useEffect, useState } from "react"
 import SignUpForm from "@/components/SignUpForm"
+import { useSearchParams } from 'next/navigation'
 
 export default function Page() {
-    const [potentialSlug, setPotentialSlug] = useState<string>('')
+    const searchParams = useSearchParams()
+    const stolen = searchParams.get('stealing')
+    const [potentialSlug, setPotentialSlug] = useState<string>(stolen || '')
     const [availible, setAvailible] = useState<boolean>()
     const [showLoginForm, setShowLoginForm] = useState<boolean>(false)
 
@@ -76,8 +79,9 @@ export default function Page() {
                             <SignUpForm potentialSlug={potentialSlug} supabase={supabase} />
                         </div>
                         <div>
-                            <p className="italic">Change your mind?</p>
-                            <button onClick={() => setShowLoginForm(false)} className="border p-4 text-bold rounded-xl">Go back</button>
+                            <button onClick={() => setShowLoginForm(false)} className="border rounded-xl shadow-inset-home-btn border-[rgba(12,12,12,0.19)] flex justify-center items-center py-3 px-4 enabled:hover:scale-105 enabled:hover:text-black text-neutral-500 duration-150 ease-linear">
+                                😳 Change your mind?
+                            </button>
                         </div>
                     </div>
                 </>

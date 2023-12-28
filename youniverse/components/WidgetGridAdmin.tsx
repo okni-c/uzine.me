@@ -47,17 +47,19 @@ export default function WidgetGridAdmin({ widgets, supabase, slug, isAdmin, user
         // This will run instantly always
         const grid = gridRef.current;
         let serializedFull = grid.save(false, true);
-        console.log(serializedFull.children)
+        //console.log(serializedFull.children)
 
         setWidgetArray(serializedFull.children)
 
         // I want to debounce this await only
-        const { data, error } = await supabase
+        const { error } = await supabase
             .from('user_sites')
             .update({ widget_data: serializedFull.children })
             .eq('slug', slug)
-
-        return console.log(error)
+        
+            if (error) {
+                return console.log(error)
+            }
     }
 
     function addEvents(grid: any) {
@@ -157,7 +159,6 @@ export default function WidgetGridAdmin({ widgets, supabase, slug, isAdmin, user
 
     async function copyToClip() {
         await navigator.clipboard.writeText(window.location.toString())
-        console.log(window.location.toString())
         toast('Copied to clipboard!', {
             duration: 2000,
             position: 'top-center',
@@ -258,7 +259,6 @@ export default function WidgetGridAdmin({ widgets, supabase, slug, isAdmin, user
 
     return (
         <>
-            <Toaster />
 
             {/* Admin edit tray */}
             <div className='flex flex-row gap-3 my-1 rounded-xl border border-[rgba(12, 12, 12, 0.50)] bg-[rgba(0, 0, 0, 0.12)] p-2 w-min items-center shadow-sm ml-[10px]'>
@@ -269,7 +269,6 @@ export default function WidgetGridAdmin({ widgets, supabase, slug, isAdmin, user
                 <button className='edit-tray-btn' onClick={() => addWidget('Paragraph')}><img src='/text-button.svg' className='h-[15px]' /></button>
                 <button className='edit-tray-btn' onClick={() => addWidget('Section')}><img src='/section-button.svg' className='h-[15px]' /></button>
                 <button disabled={true} className='edit-tray-btn'><img src='/map-button.svg' className='h-[15px]' /></button>
-                {/* <button className='edit-tray-btn' onClick={() => addWidget('GitHub')}><img src='/github-button.svg' className='h-[20px]' /></button> */}
             </div>
 
             <div className="grid-stack">

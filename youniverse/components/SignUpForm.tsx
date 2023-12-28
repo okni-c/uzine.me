@@ -87,7 +87,8 @@ export default function SignUpForm({ potentialSlug, supabase }: any) {
     return (
         <>
             <Toaster />
-            <p className="tracking-tight text-xl mb-12">Reserving <span className="font-bold">uzine.me/{potentialSlug}</span></p>
+            <p className="tracking-tight text-2xl mb-12 font-semibold">Almost done!</p>
+            <p className="tracking-tight text-xl mb-12 border rounded-2xl p-3 animate-bounce w-min"><span className="font-bold">uzine.me/{potentialSlug}</span></p>
             <form
                 className="animate-in flex-1 flex flex-col w-full justify-center gap-5 text-foreground"
                 action={signUp}

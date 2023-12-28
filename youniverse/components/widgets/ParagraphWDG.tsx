@@ -31,7 +31,7 @@ export default function ParagraphWDG({ text, id, hex, isAdmin, widgetArray, setW
             let updatedWidgetArray = [...widgetArray];
             updatedWidgetArray[thisWidgetIndex] = updatedWidget;
 
-            console.log(updatedWidgetArray);
+            // console.log(updatedWidgetArray);
 
             // Update state with the new array
             setWidgetArray(updatedWidgetArray);
@@ -51,11 +51,11 @@ export default function ParagraphWDG({ text, id, hex, isAdmin, widgetArray, setW
             {/* Are we the Author? */}
             {isAdmin ? (
                 <div className='w-full h-full flex flex-col relative grid-stack-border hover:cursor-move' style={{ backgroundColor: hex }}>
-                    <textarea className='hover:bg-[rgba(12,12,12,0.09)] bg-transparent font-bold text-xl break-words overscroll-x-none w-full h-full resize-none p-1 focus-visible:outline-neutral-400 rounded-lg !overflow-y-auto text-center' onChange={handleChange} onBlur={handleBlur} value={textState} />
+                    <textarea className='hover:bg-[rgba(12,12,12,0.09)] bg-transparent font-bold text-2xl break-words overscroll-x-none w-full h-full resize-none p-1 focus-visible:outline-neutral-400 rounded-lg !overflow-y-auto text-center flex flex-col justify-center item' onChange={handleChange} onBlur={handleBlur} value={textState} />
                 </div>
             ) :
                 <div className='w-full h-full flex flex-col relative grid-stack-border !border-[rgba(12, 12, 12, 0.19)]' style={{ backgroundColor: hex }}>
-                    <p className='bg-transparent font-bold text-xl break-words overscroll-x-none w-full h-full resize-none p-1 focus-visible:outline-neutral-400 rounded-lg !overflow-y-auto'>{textState}</p>
+                    <p className='bg-transparent font-bold text-2xl break-words overscroll-x-none w-full h-full resize-none p-1 focus-visible:outline-neutral-400 rounded-lg !overflow-y-auto'>{textState}</p>
                 </div>
             }
         </>

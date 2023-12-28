@@ -5,8 +5,10 @@ import { useEffect } from 'react';
 import { useState } from 'react';
 import WidgetGridAdmin from '@/components/WidgetGridAdmin';
 import WidgetGridGuest from '@/components/WidgetGridGuest';
-import AuthButton from '@/components/AuthButton';
 import ProfileHeading from '@/components/ProfileHeading';
+import Link from 'next/link';
+import AuthButton from '@/components/AuthButton';
+
 
 export default function Page() {
     const supabase = createClient()
@@ -14,10 +16,11 @@ export default function Page() {
     const [stores, setStores] = useState<any>()
     const [isAuth, setIsAuth] = useState<any>(null)
     const [isUser, setIsUser] = useState<boolean>(false)
+    const [doesNotExist, setDNE] = useState<boolean>(false)
 
     useEffect(() => {
         async function getUser() {
-            const { data, error } = await supabase.auth.getSession()
+            const { data } = await supabase.auth.getSession()
 
             return setIsAuth(data.session)
         }
@@ -26,11 +29,15 @@ export default function Page() {
 
     useEffect(() => {
         async function getProfileData() {
-            const { data: profile } = await supabase
+            const { data: profile, error } = await supabase
                 .from('user_sites')
                 .select()
                 .eq('slug', params.slug)
                 .single()
+
+            if (error) {
+                return setDNE(true)
+            }
 
             return setStores(profile)
         }
@@ -51,20 +58,34 @@ export default function Page() {
 
     return (
         <>
-            <div className='flex w-full justify-between flex-row max-w-[1400px] p-14'>
-                {stores ? (
-                    <div className='w-full flex xl:flex-row flex-col gap-10 justify-between relative animate-in'>
-                        {isUser ? <p className='text-green-500 font-bold text-xs absolute top-0 left-0'>This is your account.</p> : <p className='text-red-500 font-bold text-xs absolute'>This is not your account.</p>}
-                        <div className='flex flex-col justify-center items-center xl:items-start xl:justify-start gap-3 my-5'>
-                            <ProfileHeading isAdmin={isUser} user_data={stores} supabase={supabase} />
-                        </div>
-                        <div className='max-w-[820px] w-full mx-auto'>
-                            {isUser ? <WidgetGridAdmin widgets={stores.widget_data} supabase={supabase} slug={params.slug} isAdmin={isUser} userId={isAuth.user.id} /> : <WidgetGridGuest widgets={stores.widget_data} isUser={isUser} />}
-                        </div>
+            {stores ? (
+                <div className='max-w-[1200px] w-full xl:ml-[430px]'>
+                    {/* These are absolute at xl width*/}
+                    <div className='animate-in xl:fixed xl:top-3 profile-heading xl:z-50 flex flex-col justify-center items-center xl:items-start xl:justify-start gap-3 my-5 mt-14'>
+                        <ProfileHeading isAdmin={isUser} user_data={stores} supabase={supabase} />
                     </div>
-                ) : null}
-            </div>
-
+                    <div className="animate-in fixed bottom-5 left-[2.5rem] z-50">
+                        <AuthButton style="profile" />
+                    </div>
+                    {/* End absolute */}
+                        <div className='animate-in max-w-[820px] w-full  h-full mt-10 mx-auto'>
+                            
+                                {isUser ?
+                                    <WidgetGridAdmin widgets={stores.widget_data} supabase={supabase} slug={params.slug} isAdmin={isUser} userId={isAuth.user.id} />
+                                    :
+                                    <WidgetGridGuest widgets={stores.widget_data} isUser={isUser} />
+                                }
+                            
+                        </div>
+                    
+                </div>
+            ) : doesNotExist ? (
+                <div className='animate-in flex gap-5 flex-col justify-center items-center mx-auto mt-12'>
+                    <p className='text-3xl font-bold animate-pulse border px-3 py-1 rounded-lg w-min'>？</p>
+                    <p className='text-xl font-bold'>Looks like this zine doesn't exist...</p>
+                    <Link href={'/signup?stealing=' + params.slug} className='hover:underline'>It's yours if you want it. 😈</Link>
+                </div>
+            ) : null}
 
         </>
     )

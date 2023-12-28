@@ -1,88 +1,88 @@
 'use client'
 
 import Image from "next/image";
-import { motion, useAnimation } from "framer-motion";
+import { motion, useAnimationControls } from "framer-motion";
 import { useState, useEffect } from "react";
 import Link from "next/link";
-
-const AnimatedNameList = ({ names }: any) => {
-    const controls = useAnimation();
-    const [currentName, setCurrentName] = useState(0);
-
-    useEffect(() => {
-        const animateNames = async () => {
-            for (let i = 0; i < names.length; i++) {
-
-                // Go to top, get there instantly
-                await controls.start({ y: -40, transition: { duration: 0 } });
-
-                // Go to center, spring effect, get there in 0.7s
-                await controls.start({ y: 0, opacity: 1, transition: { duration: 0.7, type: "spring" } });
-
-                // Wait 2s, then go to bottom, get there in 0.5s
-                await controls.start({ y: 40, transition: { duration: 0.7, delay: 2, type: "spring" } })
-
-                // Go transparent instanly after reaching the bottom
-                await controls.start({ opacity: 0, transition: { duration: 0 } })
-
-                // Add a new name
-                setCurrentName((prev) => (prev + 1) % names.length);
-
-                // Repeat for each name
-            }
-        };
-
-        animateNames();
-    }, [controls, names]);
-
-    return (
-        <div className="border-[40px] border-white bg-transparent relative">
-            <div
-                className="rounded-2xl py-3 px-4 w-[190px]"
-            >
-                <p className="text-xl text-neutral-500">uzine.me/<motion.span initial={{ y: -40 }} animate={controls} className="text-black absolute z-[-1] font-bold tracking-tight lowercase">{names[currentName]}</motion.span></p>
-            </div>
-        </div>
-    );
-};
-
-// Example usage
-const NameList = () => {
-    const names = [
-        'Dallas',
-        'Maxwell',
-        'Reed',
-        'Marc',
-        'Sariah',
-        'Jackson',
-        'Shannon',
-        'Eric',
-        'Jamey',
-        'Kevin',
-        'Mia',
-        'Ethan',
-        'Amelia',
-        'Harper',
-        'Benjamin',
-        'Elijah',
-        'Abigail',
-        'Samuel',
-        'Charlotte',
-        'Logan',
-        'Grace',
-        'Oliver',
-        'Ava',
-        'Mia',
-        'William',
-        'Scarlett'
-    ];
-
-    return <AnimatedNameList names={names} />;
-};
+import AuthButton from "@/components/AuthButton";
 
 export default function Page() {
+
+    const AnimatedNameList = ({ names }: any) => {
+        const controls = useAnimationControls();
+        const [currentName, setCurrentName] = useState(0);
+
+        useEffect(() => {
+            const animateNames = async () => {
+                    for (let i = 0; i < names.length; i++) {
+
+                        // Go to top, get there instantly
+                        await controls.start({ y: -40, transition: { duration: 0 } });
+
+                        // Go to center, spring effect, get there in 0.7s
+                        await controls.start({ y: 0, opacity: 1, transition: { duration: 0.7, type: "spring" } });
+
+                        // Wait 2s, then go to bottom, get there in 0.5s
+                        await controls.start({ y: 40, transition: { duration: 0.7, delay: 2, type: "spring" } })
+
+                        // Go transparent instanly after reaching the bottom
+                        await controls.start({ opacity: 0, transition: { duration: 0 } })
+
+                        // Add a new name
+                        setCurrentName((prev) => (prev + 1) % names.length);
+
+                        // Repeat for each name
+                    }
+            };
+
+            animateNames();
+        }, [controls, names]);
+
+        return (
+            <div className="border-[40px] border-white bg-transparent relative">
+                <div
+                    className="rounded-2xl py-3 px-4 w-[190px]"
+                >
+                    <p className="text-xl text-neutral-500">uzine.me/<motion.span initial={{ y: -40 }} animate={controls} className="text-black absolute z-[-1] font-bold tracking-tight lowercase">{names[currentName]}</motion.span></p>
+                </div>
+            </div>
+        );
+    };
+
+    const NameList = () => {
+        const names = [
+            'Dallas',
+            'Maxwell',
+            'Andrue',
+            'Reed',
+            'Marc',
+            'Sariah',
+            'Jackson',
+            'Shannon',
+            'Eric',
+            'Jamey',
+            'Kevin',
+            'Mia',
+            'Ethan',
+            'Amelia',
+            'Harper',
+            'Ben',
+            'Elijah',
+            'Abigail',
+            'Samuel',
+            'Logan',
+            'Grace',
+            'Oliver',
+            'Ava',
+            'Mia',
+            'William'
+        ];
+
+        return <AnimatedNameList names={names} />;
+    };
+
     return (
-        <div className="relative flex flex-col justify-center items-center gap-14 mt-[190px]">
+        <div className="relative flex flex-col justify-center items-center gap-14 mt-[190px] mb-auto">
             <motion.div
                 initial={{ y: -750, x: 200 }}
                 animate={{ y: -200, x: 340, rotate: 440 }}
@@ -167,19 +167,20 @@ export default function Page() {
                 Your zine.<br />Unopinionated.
             </motion.h2>
             <motion.div
-            initial={{ opacity: 0, y: -50 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 4, delay: 0.8, type: "spring" }}>
+                initial={{ opacity: 0, y: -50 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 4, delay: 0.8, type: "spring" }}>
                 <NameList />
             </motion.div>
             <motion.div
-            className="flex flex-col justify-center items-center gap-5"
-            initial={{ opacity: 0, y: -50 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 4, delay: 1, type: "spring" }}>
+                className="flex flex-col justify-center items-center gap-5"
+                initial={{ opacity: 0, y: -50 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 4, delay: 1, type: "spring" }}>
                 <Link href={'/signup'} className="border rounded-xl shadow-inset-home-btn border-[rgba(12,12,12,0.19)] flex justify-center items-center py-3 px-4 w-[185px] hover:scale-105 duration-150 ease-linear group">
                     <p className="text-lg text-neutral-500 tracking-tight font-semibold group-hover:text-black transition-colors duration-100 ease-linear">Create your zine</p>
                 </Link>
+                <AuthButton />
             </motion.div>
         </div>
     )

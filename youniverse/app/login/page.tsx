@@ -25,31 +25,17 @@ export default function Login({
       return redirect('/login?message=Could not authenticate user')
     }
 
-    return redirect('/')
-  }
+    const { data, error: error2 }: any = await supabase
+    .from('user_sites')
+    .select('slug')
+    .eq('email', email)
+    .single()
 
-  const signUp = async (formData: FormData) => {
-    'use server'
-
-    const origin = window.location.origin
-    const email = formData.get('email') as string
-    const password = formData.get('password') as string
-    const cookieStore = cookies()
-    const supabase = createClient(cookieStore)
-
-    const { error } = await supabase.auth.signUp({
-      email,
-      password,
-      options: {
-        emailRedirectTo: `${origin}/auth/callback`,
-      },
-    })
-
-    if (error) {
-      return redirect('/login?message=Could not authenticate user')
+    if (error2) {
+      return redirect('/login?message=Problem finding your slug')
     }
 
-    return redirect('/login?message=Check email to continue sign in process')
+    return redirect(`/${data.slug}`)
   }
 
   return (
@@ -101,12 +87,6 @@ export default function Login({
         <button className="bg-green-700 rounded-md px-4 py-2 text-white mb-2">
           Sign In
         </button>
-        {/* <button
-          formAction={signUp}
-          className="border border-foreground/20 rounded-md px-4 py-2 text-black mb-2"
-        >
-          Sign Up
-        </button> */}
         {searchParams?.message && (
           <p className="mt-4 p-4 bg-foreground/10 text-foreground text-center">
             {searchParams.message}
